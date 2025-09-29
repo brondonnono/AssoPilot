@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Cotisation } from '../models/Cotisation';
+import { Cotisation } from '../core/models/Cotisation';
 import { Observable } from 'rxjs';
-import { Member } from '../models/Member';
+import { Member } from '../core/models/Member';
+import { User } from '../core/models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +22,9 @@ export class MockDataService {
 
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>('assets/mock/events.json');
+  }
+
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>('assets/mock/users.json');
   }
 }
