@@ -1,0 +1,20 @@
+a {
+  padding: 0 0.5rem !important;
+}
+
+.mat-mdc-nav-list .mat-mdc-list-item {
+  border-radius: 0 !important;
+  --mat-focus-indicator-border-radius: 0 !important;
+}
+
+.mat-mdc-nav-list .mat-mdc-list-item.mdc-list-item--activated,
+.active {
+  span,
+  mat-icon {
+    color: oklch(62.3% 0.214 259.815) !important;
+  }
+}
+
+a.mdc-list-item:hover {
+  background-color: rgb(230, 230, 230);
+}

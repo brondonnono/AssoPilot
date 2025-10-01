@@ -1,11 +1,21 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+  isDevMode,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient } from '@angular/common/http';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
+
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { AuthEffects } from './core/state/auth/auth.effects';
+import { AuthReducer } from './core/state/auth/auth.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,8 +23,16 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(),
+    provideTranslateService({
+      lang: 'fr',
+      fallbackLang: 'fr',
+      loader: provideTranslateHttpLoader({
+        prefix: '/i18n/',
+        suffix: '.json',
+      }),
+    }),
     provideStore(),
     provideEffects(),
-    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })
-]
+    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),
+  ],
 };

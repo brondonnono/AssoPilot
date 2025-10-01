@@ -1,0 +1,11 @@
+<app-header (sidebarToggle)="drawer.toggle()" />
+<mat-drawer-container autosize>
+  <mat-drawer #drawer mode="side" class="!shadow-lg !w-fit !pr-9" [opened]="isSidebarOpen">
+    <app-sidebar />
+  </mat-drawer>
+  <mat-drawer-content>
+    <div class="flex-1 !p-8 !h-screen">
+      <router-outlet />
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

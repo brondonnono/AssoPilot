@@ -1,9 +1,8 @@
-import { UserType } from '../enums/UserType.enum';
+import { UserRole } from '../enums/UserRole.enum';
 export interface User {
     id: string;
     username: string;
-    email: string;
-    role: UserType;
+    role: UserRole;
     password: string;
     created_at: string;
 }

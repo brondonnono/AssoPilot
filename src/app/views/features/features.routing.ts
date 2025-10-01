@@ -1,31 +1,47 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutComponent } from './layout/layout.component';
+import { Logs } from './logs/logs';
+import { ManageMigration } from './manage-migration/manage-migration';
+import { Events } from './events/events';
+import { Cotisations } from './cotisations/cotisations';
+import { Users } from './users/users';
+import { Members } from './members/members';
+import { Dashboard } from './dashboard/dashboard';
 
 const routes: Routes = [
   {
-    path: '',
-    component: LayoutComponent,
-    children: [
-      {
-        path: 'dashboard',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
-        path: 'members',
-        loadChildren: () => import('./members/members.module').then(m => m.MembersModule)
-      },
-      {
-        path: 'logs',
-        loadChildren: () => import('./logs/logs.module').then(m => m.LogsModule)
-      },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
-    ]
+    path: 'dashboard',
+    component: Dashboard
   },
+  {
+    path: 'members',
+    component: Members
+  },
+  {
+    path: 'users',
+   component: Users
+  },
+  {
+    path: 'cotisations',
+   component: Cotisations
+  },
+  {
+    path: 'events',
+   component: Events
+  },
+  {
+    path: 'migration',
+   component: ManageMigration
+  },
+  {
+    path: 'logs',
+   component: Logs
+  },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FeaturesRoutingModule { }
+export class FeaturesRoutingModule {}
