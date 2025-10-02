@@ -3,5 +3,25 @@
         "admin": "Administrateur",
         "super-admin": "Administrateur",
         "root": "Developpeur"
+    },
+
+    "common": {
+        "actions": "Action(s)",
+        "date": "Date",
+        "location": "Lieu",
+        "title": "Titre",
+        "description": "Description",
+        "no-data-found": "Aucune donnée trouvée"
+    },
+    "sidebar": {
+        "nav-dashboard-title": "Tableau de bord",
+        "nav-users-title": "Utilisateurs",
+        "nav-members-title": "Membres",
+        "nav-cotisations-title": "Cotisations",
+        "nav-events-title": "Evènements"
+    },
+    "dashboard": {
+        "upcoming-events": "Evènements à venir",
+        "view-all": "Voir tout"
     }
 }

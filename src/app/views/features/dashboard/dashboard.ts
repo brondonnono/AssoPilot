@@ -4,33 +4,34 @@ import { EventTable } from '../../../shared/components/event-table/event-table';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MockDataService } from '../../../services/MockData.service';
 import { Event as IEvent } from '../../../core/models/Event';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MetricBox, EventTable, TranslatePipe],
+  imports: [MetricBox, EventTable, TranslatePipe, MatCardModule, MatButtonModule],
   templateUrl: './dashboard.html',
-  styleUrl: './dashboard.scss'
+  styleUrl: './dashboard.scss',
 })
 export class Dashboard implements OnInit {
-
   upcomingEvents: IEvent[] = [];
   isFetchingData = true;
 
-  constructor(private mockDataService: MockDataService) { }
+  constructor(private mockDataService: MockDataService) {}
 
   ngOnInit(): void {
     this.isFetchingData = true;
     this.mockDataService.getEvents().subscribe({
-      next: (events => {
+      next: (events) => {
         this.upcomingEvents = this.mockDataService.getUpcomingEvents(events);
-      }),
-      error: (error => {
+      },
+      error: (error) => {
         this.isFetchingData = false;
-        console.log("Get events error: ", error)
-      }),
+        console.log('Get events error: ', error);
+      },
       complete: () => {
         this.isFetchingData = false;
-      }
+      },
     });
   }
 }

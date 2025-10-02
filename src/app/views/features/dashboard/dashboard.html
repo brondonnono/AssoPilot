@@ -6,9 +6,19 @@
         <app-metric-box />
     </div>
     @if(upcomingEvents.length > 0) {
-    <div class="flex flex-col gap-3">
-        <h1 class="text-base font-semibold">{{'dashboard.upcoming-events' | translate}}</h1>
+    <div class="flex flex-col gap-3 w-full">
+       <div class="flex justify-between items-center">
+         <h1 class="text-base font-semibold">{{'dashboard.upcoming-events' | translate}}</h1>
+         <button matButton>
+            <div class="flex gap-1 items-center">
+                <span>{{'dashboard.view-all' | translate}}</span>
+                <i class="ri ri-arrow-right-line text-lg"></i>
+            </div>
+         </button>
+       </div>
+        <mat-card class="!bg-transparent w-full">
         <app-event-table [events]="upcomingEvents"/>
+        </mat-card>
     </div>
     }
 </div>

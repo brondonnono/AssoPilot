@@ -15,6 +15,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { Event as IEvent } from '../../../core/models/Event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-event-table',
@@ -26,12 +27,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatPaginatorModule,
     MatButtonModule,
     TranslatePipe,
+    DatePipe,
   ],
   templateUrl: './event-table.html',
   styleUrl: './event-table.scss',
 })
 export class EventTable implements OnInit, AfterViewInit {
-  @Output() eventTableAction: EventEmitter<string> = new EventEmitter<string>();
+  @Output() eventTableAction: EventEmitter<any> = new EventEmitter<any>();
   @Input() withSearch: boolean = false;
   @Input() withPagination: boolean = false;
   @Input() withAllActions: boolean = false;
@@ -61,7 +63,11 @@ export class EventTable implements OnInit, AfterViewInit {
       this.dataSource.paginator.firstPage();
     }
   }
-  handleTableAction(action: string) {
-    this.eventTableAction.emit(action);
+  handleTableAction(action: string, row: any) {
+    const outputObject = {
+      action: action,
+      data: row,
+    };
+    this.eventTableAction.emit(outputObject);
   }
 }
