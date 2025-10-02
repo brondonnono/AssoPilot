@@ -1,6 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
 import { NavItem, navItems } from '../../../core/utils/navItems';
 import { User } from '../../../core/models/User';
 import { UserRole } from '../../../core/enums/UserRole.enum';
@@ -9,7 +8,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatListModule, MatIconModule, TranslatePipe, RouterModule],
+  imports: [MatListModule, TranslatePipe, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

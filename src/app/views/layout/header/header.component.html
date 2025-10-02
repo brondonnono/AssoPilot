@@ -1,17 +1,19 @@
 <mat-toolbar class="!bg-blue-500 !text-white">
-  <button matIconButton (click)="sidebarButtonClick()">
-    <mat-icon class="!text-white">menu</mat-icon>
-  </button>
-  <a href="/">{{ appName }}</a>
+  <div class="flex items-center">
+    <button matIconButton (click)="sidebarButtonClick()">
+      <i class="ri-menu-line !text-white"></i>
+    </button>
+    <a href="/">{{ appName }}</a>
+  </div>
   <span class="example-spacer"></span>
   <div class="flex items-center gap-1">
-    <mat-icon class="!text-white">account_circle</mat-icon>
+    <i class="ri-account-circle-fill !text-white"></i>
     <div class="flex flex-col text-center">
       <span class="text-sm font-medium">{{ currentUser.username }}</span>
       <span class="text-xs"> {{ 'role.' + currentUser.role | translate }}</span>
     </div>
     <button (click)="logout()" matIconButton [matTooltip]="'logout' | translate">
-      <mat-icon class="!text-red-600">exit_to_app</mat-icon>
+      <i class="ri-logout-circle-r-line !text-red-600"></i>
     </button>
   </div>
 </mat-toolbar>
