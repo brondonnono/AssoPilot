@@ -17,11 +17,14 @@
       </button>
     </div>
   </div>
+  @if (!isFetchingData) {
   <app-event-table
     class="w-full"
     [events]="events"
     [withSearch]="true"
     [withPagination]="true"
     [withAllActions]="true"
+    (eventTableAction)="handleEventAction($event)"
   />
+  }
 </div>

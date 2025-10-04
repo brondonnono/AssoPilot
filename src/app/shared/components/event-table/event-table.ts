@@ -17,6 +17,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DatePipe } from '@angular/common';
 import { CustomMatPaginatorIntl } from '../../../core/utils/paginator-intl';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-event-table',
@@ -27,6 +28,7 @@ import { CustomMatPaginatorIntl } from '../../../core/utils/paginator-intl';
     MatSortModule,
     MatPaginatorModule,
     MatButtonModule,
+    MatTooltipModule,
     TranslatePipe,
     DatePipe,
   ],

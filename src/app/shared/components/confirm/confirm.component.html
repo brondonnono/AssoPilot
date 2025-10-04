@@ -1,0 +1,18 @@
+<mat-dialog-content>
+  <div class="w-full flex items-center justify-center text-center">
+    <div class="rounded-full flex items-center justify-center w-10 h-10 bg-blue-200">
+      <i class="ri ri-information-2-line text-3xl text-blue-600"></i>
+    </div>
+  </div>
+  <div class="pt-5 w-full">
+    <p [innerHTML]="message | translate"></p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <div class="w-full flex justify-between items-center">
+    <button matButton mat-dialog-close>{{ 'common.' + cancelBtnLabel | translate }}</button>
+    <button matButton [mat-dialog-close]="true" cdkFocusInitial>
+      {{ 'common.' + actionBtnLabel | translate }}
+    </button>
+  </div>
+</mat-dialog-actions>

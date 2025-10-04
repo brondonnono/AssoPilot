@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -7,14 +7,25 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { MockDataService } from '../../../services/MockData.service';
 import { Event as IEvent } from '../../../core/models/Event';
 import { EventTable } from '../../../shared/components/event-table/event-table';
+import { ActionType } from '../../../core/enums/ActionType.enum';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
 
 @Component({
   selector: 'app-events',
-  imports: [TranslatePipe, MatButtonModule, MatIconModule, MatTooltipModule, EventTable],
+  imports: [
+    TranslatePipe,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+    EventTable,
+    MatDialogModule,
+  ],
   templateUrl: './events.html',
   styleUrl: './events.scss',
 })
 export class Events implements OnInit {
+  readonly dialog = inject(MatDialog);
   events: IEvent[] = [];
   isFetchingData = false;
 
@@ -39,4 +50,19 @@ export class Events implements OnInit {
   add() {}
 
   download() {}
+
+  handleEventAction(event: any) {
+    const { action: action, data } = event;
+    if (action === ActionType.DELETE) {
+      this.openConfirmModal();
+      console.log(event);
+    }
+  }
+
+  openConfirmModal() {
+    const dialogRef = this.dialog.open(ConfirmComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
 }

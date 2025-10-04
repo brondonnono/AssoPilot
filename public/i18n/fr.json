@@ -18,7 +18,14 @@
     "save": "Enregistrer",
     "export": "Exporter",
     "download": "Télécharger",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "view-details": "Voir les détails",
+    "continue": "Continuer",
+    "cancel": "Annuler",
+    "ok": "OK",
+    "yes": "Oui",
+    "no": "Non",
+    "confirm-text": "Cette action est irreversible, voulez-vous continuer ?"
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",

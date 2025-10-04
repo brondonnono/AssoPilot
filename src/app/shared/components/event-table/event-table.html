@@ -104,7 +104,7 @@
           <button
             mat-icon-button
             (click)="handleTableAction('show', row)"
-            matTooltip="View"
+            [matTooltip]="'common.view-details' | translate"
             class="!rounded-full hover:!bg-gray-100 !p-2"
           >
             <i class="ri-eye-line !text-blue-600 !text-lg"></i>
@@ -112,7 +112,7 @@
           <button
             mat-icon-button
             (click)="handleTableAction('edit', row)"
-            matTooltip="Edit"
+            [matTooltip]="'common.edit' | translate"
             class="!rounded-full hover:!bg-gray-100 !p-2"
           >
             <i class="ri-edit-line !text-green-600 !text-lg"></i>
@@ -120,7 +120,7 @@
           <button
             mat-icon-button
             (click)="handleTableAction('delete', row)"
-            matTooltip="Delete"
+            [matTooltip]="'common.delete' | translate"
             class="!rounded-full hover:!bg-gray-100 !p-2"
           >
             <i class="ri-delete-bin-line !text-red-600 !text-lg"></i>
