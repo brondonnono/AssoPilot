@@ -1,7 +1,7 @@
 [
   {
     "id": "cotisation1",
-    "label": "Tontine 10000",
+    "title": "Tontine 10000",
     "amount": 10000,
     "frequency": "week",
     "start_date": "2025-01-01",
@@ -11,7 +11,7 @@
   },
   {
     "id": "cotisation2",
-    "label": "Tontine 5000",
+    "title": "Tontine 5000",
     "amount": 5000,
     "frequency": "week",
     "start_date": "2025-03-01",
@@ -21,7 +21,7 @@
   },
   {
     "id": "cotisation3",
-    "label": "Tontine Étudiants",
+    "title": "Tontine Étudiants",
     "amount": 2000,
     "frequency": "month",
     "start_date": "2025-02-15",
@@ -31,7 +31,7 @@
   },
   {
     "id": "cotisation4",
-    "label": "Tontine Entreprises",
+    "title": "Tontine Entreprises",
     "amount": 25000,
     "frequency": "quarter",
     "start_date": "2025-04-01",

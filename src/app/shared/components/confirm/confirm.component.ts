@@ -7,7 +7,7 @@ import { TranslatePipe } from '@ngx-translate/core';
   selector: 'app-confirm',
   imports: [MatDialogModule, MatButtonModule, TranslatePipe],
   templateUrl: './confirm.component.html',
-  styleUrl: './confirm.component.css',
+  styleUrl: './confirm.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmComponent {

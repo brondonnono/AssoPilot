@@ -1,12 +1,12 @@
 @if(withSearch) {
-<mat-form-field>
+<mat-form-field class="w-full">
   <mat-label>{{ 'common.search' | translate }}</mat-label>
   <div class="!flex h-full items-center">
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
+    <input matInput (keyup)="applyFilter(input.value)" placeholder="Ex. Mia" #input />
     @if(input.value){
     <i
       class="ri ri-close-circle-line text-xl text-red-600 hover:text-red-400 cursor-pointer"
-      (click)="input.value = ''; applyFilter($event)"
+      (click)="input.value = ''; applyFilter('')"
     ></i>
     }
   </div>

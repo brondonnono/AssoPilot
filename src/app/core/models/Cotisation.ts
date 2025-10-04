@@ -1,6 +1,6 @@
 export interface Cotisation {
   id: string;
-  label: string;
+  title: string;
   amount: number;
   frequency: string;
   start_date: string;
@@ -10,13 +10,13 @@ export interface Cotisation {
 }
 
 export class CotisationStore {
-  label: string;
+  title: string;
   amount: number;
   start_date: string;
   frequency: string;
 
-  constructor(label: string, amount: number, start_date: string, frequency: string) {
-    this.label = label;
+  constructor(title: string, amount: number, start_date: string, frequency: string) {
+    this.title = title;
     this.amount = amount;
     this.start_date = start_date;
     this.frequency = frequency;

@@ -1,16 +1,28 @@
 {
   "role": {
-    "admin": "Administrateur",
-    "super-admin": "Administrateur",
+    "admin": "Utilisateur",
+    "super_admin": "Administrateur",
     "root": "Developpeur"
   },
 
   "common": {
     "actions": "Action(s)",
+    "name": "Nom(s)",
+    "phone": "numéro de téléphone",
+    "cni": "Numéro de CNI",
+    "status": "Statut",
+    "joined_date": "Date d'adhésion",
+    "start_date": "Date de début",
+    "frequency": "Fréquence",
+    "amount": "Montant à cotiser",
+    "participant_number": "Nombre de participants",
     "date": "Date",
     "location": "Lieu",
     "title": "Titre",
     "description": "Description",
+    "created_at": "Créé(e) le",
+    "role": "Rôle",
+    "username": "Nom d'utilisateur",
     "no-data-found": "Aucune donnée trouvée",
     "add": "Ajouter",
     "delete": "Supprimer",
@@ -41,8 +53,32 @@
   },
   "events": {
     "heading-title": "Evènements",
-    "event-list-label": "Liste des évènements"
+    "events-list-label": "Liste des évènements"
   },
+
+  "users": {
+    "heading-title": "Utilisateurs",
+    "users-list-label": "Liste des utilisateurs"
+  },
+
+  "logs": {
+    "heading-title": "Journal d'actions des utilisateurs",
+    "logs-list-label": "Liste des actions éffectuées"
+  },
+
+  "cotisations": {
+    "heading-title": "Cotisations",
+    "cotisations-list-label": "Liste des cotisations"
+  },
+
+  "members": {
+    "heading-title": "Membres",
+    "members-list-label": "Liste des membres",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "in_review": "En observation"
+  },
+
   "paginator": {
     "items-per-page": "Éléments par page",
     "next-page": "Page suivante",

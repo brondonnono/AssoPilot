@@ -1,1 +1,61 @@
-<p>cotisations works!</p>
+<div class="pb-9">
+  <h1 class="text-xl font-semibold">
+    {{ 'cotisations.heading-title' | translate }}
+  </h1>
+</div>
+<div class="flex flex-col gap-3 items-center shadow-md p-4">
+  <div class="flex justify-between items-center w-full">
+    <h1 class="text-lg">
+      {{ 'cotisations.cotisations-list-label' | translate }}
+    </h1>
+    <div class="flex gap-1">
+      <button mat-icon-button (click)="add()" [matTooltip]="'common.add' | translate">
+        <i class="ri-add-circle-line !text-blue-600 !text-lg"></i>
+      </button>
+      <button mat-icon-button (click)="download()" [matTooltip]="'common.download' | translate">
+        <i class="ri-download-line !text-green-600 !text-lg"></i>
+      </button>
+    </div>
+  </div>
+  @if (!isFetchingData) {
+  <app-table
+    class="w-full"
+    [data]="cotisations"
+    [withSearch]="true"
+    [withPagination]="true"
+    [displayedColumns]="displayedColumns"
+  >
+    <ng-template appColumnTemplate="start_date" let-row>
+      {{ row.start_date | date : 'mediumDate' }}
+    </ng-template>
+    <ng-template appColumnTemplate="actions" let-row>
+      <div class="!flex !gap-2">
+        <button
+          mat-icon-button
+          (click)="view(row.id)"
+          [matTooltip]="'common.view-details' | translate"
+          class="!rounded-full hover:!bg-gray-100 !p-2"
+        >
+          <i class="ri-eye-line !text-blue-600 !text-lg"></i>
+        </button>
+        <button
+          mat-icon-button
+          (click)="edit(row.id)"
+          [matTooltip]="'common.edit' | translate"
+          class="!rounded-full hover:!bg-gray-100 !p-2"
+        >
+          <i class="ri-edit-line !text-green-600 !text-lg"></i>
+        </button>
+        <button
+          mat-icon-button
+          (click)="remove(row.id)"
+          [matTooltip]="'common.delete' | translate"
+          class="!rounded-full hover:!bg-gray-100 !p-2"
+        >
+          <i class="ri-delete-bin-line !text-red-600 !text-lg"></i>
+        </button>
+      </div>
+    </ng-template>
+  </app-table>
+  }
+</div>

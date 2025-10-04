@@ -1,0 +1,70 @@
+@if(withSearch) {
+<mat-form-field class="w-full">
+  <mat-label>{{ 'common.search' | translate }}</mat-label>
+  <div class="!flex h-full items-center">
+    <input matInput (keyup)="applyFilter(input.value)" placeholder="Ex. Mia" #input />
+    @if(input.value){
+    <i
+      class="ri ri-close-circle-line text-xl text-red-600 hover:text-red-400 cursor-pointer"
+      (click)="input.value = ''; applyFilter('')"
+    ></i>
+    }
+  </div>
+</mat-form-field>
+}
+
+<div class="!overflow-hidden !bg-white">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    class="!min-w-full !border-collapse !text-sm !text-gray-700"
+  >
+    <!-- Title Column -->
+    @for (column of displayedColumns; track $index) { @if (column) {}
+    <ng-container [matColumnDef]="column">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        class="!bg-gray-100 !text-gray-700 !font-semibold !uppercase !text-xs !tracking-wide !px-4 !py-3"
+      >
+        {{ 'common.' + column.toLowerCase() | translate }}
+      </th>
+      <td mat-cell *matCellDef="let row" class="!px-4 !py-3">
+        <!-- Vérifie si un template personnalisé existe -->
+        @if (columnTemplateMap[column]) {
+        <ng-container
+          *ngTemplateOutlet="columnTemplateMap[column]; context: { $implicit: row }"
+        ></ng-container>
+        } @else {
+        <ng-container>
+          {{ row[column] }}
+        </ng-container>
+        }
+      </td>
+    </ng-container>
+    }
+
+    <!-- Header & Rows -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="!border-b !border-gray-200"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns"
+      class="!border-b !border-gray-200 hover:!bg-gray-50 !transition"
+    ></tr>
+
+    <!-- No data -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell !text-center !text-gray-500 !py-6" colspan="5">
+        {{ 'common.no-data-found' | translate }}
+      </td>
+    </tr>
+  </table>
+
+  <!-- Paginator -->
+  @if(withPagination) {
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons class="!px-4 !py-2">
+  </mat-paginator>
+  }
+</div>
