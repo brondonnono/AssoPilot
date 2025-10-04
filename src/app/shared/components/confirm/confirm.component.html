@@ -5,14 +5,16 @@
     </div>
   </div>
   <div class="pt-5 w-full">
-    <p [innerHTML]="message | translate"></p>
+    <p [innerHTML]="data?.message ?? message | translate"></p>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
   <div class="w-full flex justify-between items-center">
-    <button matButton mat-dialog-close>{{ 'common.' + cancelBtnLabel | translate }}</button>
+    <button matButton mat-dialog-close>
+      {{ 'common.' + (data?.cancelBtnLabel ?? cancelBtnLabel) | translate }}
+    </button>
     <button matButton [mat-dialog-close]="true" cdkFocusInitial>
-      {{ 'common.' + actionBtnLabel | translate }}
+      {{ 'common.' + (data?.actionBtnLabel ?? actionBtnLabel) | translate }}
     </button>
   </div>
 </mat-dialog-actions>

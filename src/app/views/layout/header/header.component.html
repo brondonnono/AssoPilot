@@ -12,7 +12,7 @@
       <span class="text-sm font-medium">{{ currentUser.username }}</span>
       <span class="text-xs"> {{ 'role.' + currentUser.role | translate }}</span>
     </div>
-    <button (click)="logout()" matIconButton [matTooltip]="'logout' | translate">
+    <button (click)="logout()" matIconButton [matTooltip]="'common.logout' | translate">
       <i class="ri-logout-circle-r-line !text-red-600"></i>
     </button>
   </div>

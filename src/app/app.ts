@@ -8,5 +8,5 @@ import { LayoutComponent } from './views/layout/layout.component';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('Djangui app');
+  protected readonly title = signal('AssoPilot');
 }

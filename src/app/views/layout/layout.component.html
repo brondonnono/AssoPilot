@@ -1,4 +1,4 @@
-<app-header (sidebarToggle)="drawer.toggle()" />
+<app-header (sidebarToggle)="drawer.toggle()" class="sticky top-0 z-50" />
 <mat-drawer-container autosize>
   <mat-drawer #drawer mode="side" class="!shadow-lg !w-fit" [opened]="isSidebarOpen">
     <app-sidebar />

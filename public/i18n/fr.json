@@ -37,7 +37,9 @@
     "ok": "OK",
     "yes": "Oui",
     "no": "Non",
-    "confirm-text": "Cette action est irreversible, voulez-vous continuer ?"
+    "confirm-text": "Cette action est irreversible, voulez-vous continuer ?",
+    "logout": "Déconnexion",
+    "logout-msg": "Voulez-vous vraiment vous déconnecter ?"
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",

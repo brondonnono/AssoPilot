@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "djangui-app": {
+    "asso-pilot": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -62,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "djangui-app:build:production"
+              "buildTarget": "asso-pilot:build:production"
             },
             "development": {
-              "buildTarget": "djangui-app:build:development"
+              "buildTarget": "asso-pilot:build:development"
             }
           },
           "defaultConfiguration": "development"

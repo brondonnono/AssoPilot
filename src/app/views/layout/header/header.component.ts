@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -7,6 +7,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { User } from '../../../core/models/User';
 import { UserRole } from '../../../core/enums/UserRole.enum';
 import { AuthService } from '../../../services/auth-service';
+import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
+import { MatDialog } from '@angular/material/dialog';
+import { logout } from '../../../core/state/auth/auth.actions';
 
 @Component({
   selector: 'app-header',
@@ -15,8 +18,9 @@ import { AuthService } from '../../../services/auth-service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent {
+  readonly dialog = inject(MatDialog);
   @Output() sidebarToggle = new EventEmitter<void>();
-  appName = 'NDJANGUI';
+  appName = 'ASSOPILOT';
   currentUser!: User;
 
   constructor(private authService: AuthService) {
@@ -34,6 +38,18 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.openConfirmModal().subscribe((result) => {
+      console.log(`Dialog result: ${result}`);
+      this.authService.logout();
+    });
+  }
+
+  openConfirmModal() {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        message: 'common.logout-msg',
+      },
+    });
+    return dialogRef.afterClosed();
   }
 }

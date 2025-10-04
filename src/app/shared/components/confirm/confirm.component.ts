@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -11,7 +11,12 @@ import { TranslatePipe } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmComponent {
-  @Input() actionBtnLabel = 'yes';
-  @Input() cancelBtnLabel = 'no';
-  @Input() message = 'common.confirm-text';
+  data?: {
+    actionBtnLabel: string;
+    cancelBtnLabel: string;
+    message: string;
+  } = inject(MAT_DIALOG_DATA);
+  actionBtnLabel = 'yes';
+  cancelBtnLabel = 'no';
+  message = 'common.confirm-text';
 }

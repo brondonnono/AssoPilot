@@ -43,7 +43,7 @@ export class Members {
       },
       error: (error) => {
         this.isFetchingData = false;
-        console.log('Get users error: ', error);
+        console.log('Get members error: ', error);
       },
       complete: () => {
         this.isFetchingData = false;
