@@ -44,15 +44,15 @@
     "nav-users-title": "Utilisateurs",
     "nav-members-title": "Membres",
     "nav-cotisations-title": "Cotisations",
-    "nav-events-title": "Evènements"
+    "nav-events-title": "Évènements"
   },
   "dashboard": {
     "heading-title": "Tableau de bord",
-    "upcoming-events": "Evènements à venir",
+    "upcoming-events": "Évènements à venir",
     "view-all": "Voir tout"
   },
   "events": {
-    "heading-title": "Evènements",
+    "heading-title": "Évènements",
     "events-list-label": "Liste des évènements"
   },
 
