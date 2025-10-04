@@ -1,24 +1,29 @@
+<div class="pb-9">
+  <h1 class="text-xl font-semibold">
+    {{ 'dashboard.heading-title' | translate }}
+  </h1>
+</div>
 <div class="flex flex-col gap-10">
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <app-metric-box bgColor="!bg-green-300" />
-        <app-metric-box bgColor="!bg-orange-300" />
-        <app-metric-box bgColor="!bg-purple-300" />
-        <app-metric-box />
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <app-metric-box bgColor="!bg-green-300" />
+    <app-metric-box bgColor="!bg-orange-300" />
+    <app-metric-box bgColor="!bg-purple-300" />
+    <app-metric-box />
+  </div>
+  @if(upcomingEvents.length > 0) {
+  <div class="flex flex-col gap-3 w-full">
+    <div class="flex justify-between items-center">
+      <h1 class="text-base">{{ 'dashboard.upcoming-events' | translate }}</h1>
+      <button matButton>
+        <div class="flex gap-1 items-center">
+          <span>{{ 'dashboard.view-all' | translate }}</span>
+          <i class="ri ri-arrow-right-line text-lg"></i>
+        </div>
+      </button>
     </div>
-    @if(upcomingEvents.length > 0) {
-    <div class="flex flex-col gap-3 w-full">
-       <div class="flex justify-between items-center">
-         <h1 class="text-base font-semibold">{{'dashboard.upcoming-events' | translate}}</h1>
-         <button matButton>
-            <div class="flex gap-1 items-center">
-                <span>{{'dashboard.view-all' | translate}}</span>
-                <i class="ri ri-arrow-right-line text-lg"></i>
-            </div>
-         </button>
-       </div>
-        <mat-card class="!bg-transparent w-full">
-        <app-event-table [events]="upcomingEvents"/>
-        </mat-card>
-    </div>
-    }
+    <mat-card class="!bg-transparent w-full">
+      <app-event-table [events]="upcomingEvents" />
+    </mat-card>
+  </div>
+  }
 </div>

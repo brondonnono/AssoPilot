@@ -1,27 +1,47 @@
 {
-    "role": {
-        "admin": "Administrateur",
-        "super-admin": "Administrateur",
-        "root": "Developpeur"
-    },
+  "role": {
+    "admin": "Administrateur",
+    "super-admin": "Administrateur",
+    "root": "Developpeur"
+  },
 
-    "common": {
-        "actions": "Action(s)",
-        "date": "Date",
-        "location": "Lieu",
-        "title": "Titre",
-        "description": "Description",
-        "no-data-found": "Aucune donnée trouvée"
-    },
-    "sidebar": {
-        "nav-dashboard-title": "Tableau de bord",
-        "nav-users-title": "Utilisateurs",
-        "nav-members-title": "Membres",
-        "nav-cotisations-title": "Cotisations",
-        "nav-events-title": "Evènements"
-    },
-    "dashboard": {
-        "upcoming-events": "Evènements à venir",
-        "view-all": "Voir tout"
-    }
+  "common": {
+    "actions": "Action(s)",
+    "date": "Date",
+    "location": "Lieu",
+    "title": "Titre",
+    "description": "Description",
+    "no-data-found": "Aucune donnée trouvée",
+    "add": "Ajouter",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "save": "Enregistrer",
+    "export": "Exporter",
+    "download": "Télécharger",
+    "search": "Rechercher"
+  },
+  "sidebar": {
+    "nav-dashboard-title": "Tableau de bord",
+    "nav-users-title": "Utilisateurs",
+    "nav-members-title": "Membres",
+    "nav-cotisations-title": "Cotisations",
+    "nav-events-title": "Evènements"
+  },
+  "dashboard": {
+    "heading-title": "Tableau de bord",
+    "upcoming-events": "Evènements à venir",
+    "view-all": "Voir tout"
+  },
+  "events": {
+    "heading-title": "Evènements",
+    "event-list-label": "Liste des évènements"
+  },
+  "paginator": {
+    "items-per-page": "Éléments par page",
+    "next-page": "Page suivante",
+    "previous-page": "Page précédente",
+    "first-page": "Première page",
+    "last-page": "Dernière page",
+    "range-page": "{{start}} - {{end}} sur {{length}}"
+  }
 }

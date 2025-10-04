@@ -7,7 +7,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,7 @@ import { Event as IEvent } from '../../../core/models/Event';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatButtonModule } from '@angular/material/button';
 import { DatePipe } from '@angular/common';
+import { CustomMatPaginatorIntl } from '../../../core/utils/paginator-intl';
 
 @Component({
   selector: 'app-event-table',
@@ -28,6 +29,12 @@ import { DatePipe } from '@angular/common';
     MatButtonModule,
     TranslatePipe,
     DatePipe,
+  ],
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useClass: CustomMatPaginatorIntl,
+    },
   ],
   templateUrl: './event-table.html',
   styleUrl: './event-table.scss',
