@@ -6,10 +6,11 @@ import { MockDataService } from '../../../services/MockData.service';
 import { Event as IEvent } from '../../../core/models/Event';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MetricBox, EventTable, TranslatePipe, MatCardModule, MatButtonModule],
+  imports: [MetricBox, EventTable, TranslatePipe, MatCardModule, MatButtonModule, RouterLink],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
