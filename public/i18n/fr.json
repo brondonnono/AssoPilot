@@ -39,7 +39,8 @@
     "no": "Non",
     "confirm-text": "Cette action est irreversible, voulez-vous continuer ?",
     "logout": "Déconnexion",
-    "logout-msg": "Voulez-vous vraiment vous déconnecter ?"
+    "logout-msg": "Voulez-vous vraiment vous déconnecter ?",
+    "field-required": "Champ obligatoire"
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",
@@ -60,7 +61,11 @@
 
   "users": {
     "heading-title": "Utilisateurs",
-    "users-list-label": "Liste des utilisateurs"
+    "users-list-label": "Liste des utilisateurs",
+    "username-title": "Nom d'utilisateur",
+    "password-title": "Mot de passe",
+    "cpassword-title": "Confirmer le mot de passe",
+    "select-role-title": "Choisir un rôle"
   },
 
   "logs": {

@@ -11,6 +11,7 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { DatePipe } from '@angular/common';
 import { ColumnTemplateDirective } from '../../../core/directives/ColumnTemplate.directive';
 import { UserRole } from '../../../core/enums/UserRole.enum';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 @Component({
   selector: 'app-users',
@@ -36,6 +37,10 @@ export class Users {
   constructor(private mockDataService: MockDataService) {}
 
   ngOnInit(): void {
+    this.fetchUsers();
+  }
+
+  fetchUsers() {
     this.isFetchingData = true;
     this.mockDataService.getUsers().subscribe({
       next: (res) => {
@@ -51,7 +56,12 @@ export class Users {
     });
   }
 
-  add() {}
+  add() {
+    this.openCreateUserModal().subscribe((res) => {
+      this.fetchUsers();
+    });
+    console.log('user');
+  }
 
   download() {}
 
@@ -67,6 +77,14 @@ export class Users {
 
   openConfirmModal() {
     const dialogRef = this.dialog.open(ConfirmComponent);
+    return dialogRef.afterClosed();
+  }
+
+  openCreateUserModal() {
+    const dialogRef = this.dialog.open(CreateUserComponent, {
+      height: 'auto',
+      width: '500px',
+    });
     return dialogRef.afterClosed();
   }
 }

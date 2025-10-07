@@ -1,0 +1,75 @@
+<div class="flex items-center w-full">
+  <h4 mat-dialog-title class="w-5/6">{{ 'users.create-user-heading' | translate }}</h4>
+  <button mat-dialog-close matIconButton>
+    <i class="ri ri-close-line text-2xl text-blue-500"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="userForm" (submit)="save()">
+    <div class="flex flex-col items-center w-full">
+      <div class="flex flex-row mb-2 gap-2 w-full">
+        <mat-form-field>
+          <mat-label>{{ 'users.username-title' | translate }}</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="username"
+            [placeholder]="'users.username-placeholder' | translate"
+            required
+          />
+          @if (username?.invalid && (username?.dirty || username?.touched) &&
+          username?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ 'users.password-title' | translate }}</mat-label>
+          <input matInput [type]="hide() ? 'password' : 'text'" />
+          <button
+            matIconButton
+            matSuffix
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'users.hide-password' | translate"
+            [attr.aria-pressed]="hide()"
+          >
+            <i class=" {{ hide() ? 'ri-eye-line' : 'ri-eye-off-line' }} text-blue-500"></i>
+          </button>
+        </mat-form-field>
+      </div>
+      <div class="w-full">
+        <mat-form-field class="!w-full">
+          <mat-label>{{ 'users.select-role-title' | translate }}</mat-label>
+          <mat-select>
+            @for (role of userRoles; track $index) {
+            <mat-option [value]="role">{{ 'role.' + role | translate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="flex justify-between w-full">
+    <button
+      matButton
+      mat-dialog-close
+      [disabled]="isLoading"
+      class=" {{ isLoading ? '!text-gray-300' : '!text-red-600' }}"
+    >
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button matButton [disabled]="userForm.invalid || isLoading" (click)="save()" cdkFocusInitial>
+      <div class="flex gap-2 items-center">
+        <i
+          class="ri-save-2-line text-lg  {{
+            userForm.invalid || isLoading ? '!text-gray-300' : 'text-blue-600'
+          }}"
+        ></i>
+        <span> {{ 'common.save' | translate }}</span>
+      </div>
+    </button>
+  </div>
+</mat-dialog-actions>
