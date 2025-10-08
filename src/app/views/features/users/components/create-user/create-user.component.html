@@ -7,40 +7,39 @@
 
 <mat-dialog-content>
   <form [formGroup]="userForm" (submit)="save()">
-    <div class="flex flex-col items-center w-full">
-      <div class="flex flex-row mb-2 gap-2 w-full">
-        <mat-form-field>
+    <div class="flex flex-col gap-6 items-center w-full">
+      <div class="flex flex-row gap-2 w-full">
+        <mat-form-field class="!w-1/2">
           <mat-label>{{ 'users.username-title' | translate }}</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="username"
-            [placeholder]="'users.username-placeholder' | translate"
-            required
-          />
+          <input matInput type="text" formControlName="username" required />
           @if (username?.invalid && (username?.dirty || username?.touched) &&
           username?.hasError('required')) {
           <mat-error>{{ 'common.field-required' | translate }}</mat-error>
           }
         </mat-form-field>
-        <mat-form-field>
+        <mat-form-field class="!w-1/2">
           <mat-label>{{ 'users.password-title' | translate }}</mat-label>
-          <input matInput [type]="hide() ? 'password' : 'text'" />
-          <button
-            matIconButton
-            matSuffix
-            (click)="clickEvent($event)"
-            [attr.aria-label]="'users.hide-password' | translate"
-            [attr.aria-pressed]="hide()"
-          >
-            <i class=" {{ hide() ? 'ri-eye-line' : 'ri-eye-off-line' }} text-blue-500"></i>
-          </button>
+          <input
+            matInput
+            [type]="hide() ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          @if (password?.invalid && (password?.dirty || password?.touched)) {
+
+          <mat-error>{{
+            (password?.hasError('minlength')
+              ? 'common.pswd-min-length-msg'
+              : 'common.field-required'
+            ) | translate
+          }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="w-full">
         <mat-form-field class="!w-full">
           <mat-label>{{ 'users.select-role-title' | translate }}</mat-label>
-          <mat-select>
+          <mat-select formControlName="role">
             @for (role of userRoles; track $index) {
             <mat-option [value]="role">{{ 'role.' + role | translate }}</mat-option>
             }
@@ -62,6 +61,9 @@
       {{ 'common.cancel' | translate }}
     </button>
     <button matButton [disabled]="userForm.invalid || isLoading" (click)="save()" cdkFocusInitial>
+      @if (isLoading) {
+      <mat-spinner></mat-spinner>
+      } @else {
       <div class="flex gap-2 items-center">
         <i
           class="ri-save-2-line text-lg  {{
@@ -70,6 +72,7 @@
         ></i>
         <span> {{ 'common.save' | translate }}</span>
       </div>
+      }
     </button>
   </div>
 </mat-dialog-actions>

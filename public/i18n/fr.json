@@ -40,7 +40,8 @@
     "confirm-text": "Cette action est irreversible, voulez-vous continuer ?",
     "logout": "Déconnexion",
     "logout-msg": "Voulez-vous vraiment vous déconnecter ?",
-    "field-required": "Champ obligatoire"
+    "field-required": "Champ obligatoire",
+    "pswd-min-length-msg": "Minimum 8 caractères"
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",
@@ -65,7 +66,8 @@
     "username-title": "Nom d'utilisateur",
     "password-title": "Mot de passe",
     "cpassword-title": "Confirmer le mot de passe",
-    "select-role-title": "Choisir un rôle"
+    "select-role-title": "Choisir un rôle",
+    "hide-password": "Masquer le mot de passe"
   },
 
   "logs": {

@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-create-user',
@@ -25,6 +26,7 @@ import { MatInputModule } from '@angular/material/input';
     MatSelectModule,
     MatIconModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     TranslatePipe,
   ],
   templateUrl: './create-user.component.html',
