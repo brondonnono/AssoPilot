@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -39,7 +39,7 @@ export class CreateUserComponent implements OnInit {
   hide = signal(true);
   isLoading = false;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<CreateUserComponent>) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -66,5 +66,7 @@ export class CreateUserComponent implements OnInit {
     event.stopPropagation();
   }
 
-  save() {}
+  save() {
+    this.dialogRef.close('_SAVED');
+  }
 }

@@ -58,9 +58,8 @@ export class Users {
 
   add() {
     this.openCreateUserModal().subscribe((res) => {
-      this.fetchUsers();
+      if (res === '_SAVED') this.fetchUsers();
     });
-    console.log('user');
   }
 
   download() {}

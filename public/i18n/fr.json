@@ -65,7 +65,7 @@
     "users-list-label": "Liste des utilisateurs",
     "username-title": "Nom d'utilisateur",
     "password-title": "Mot de passe",
-    "cpassword-title": "Confirmer le mot de passe",
+    "create-user-heading": "Créer un utilisateur",
     "select-role-title": "Choisir un rôle",
     "hide-password": "Masquer le mot de passe"
   },
