@@ -11,7 +11,8 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { DatePipe } from '@angular/common';
 import { ColumnTemplateDirective } from '../../../core/directives/ColumnTemplate.directive';
 import { UserRole } from '../../../core/enums/UserRole.enum';
-import { CreateUserComponent } from './components/create-user/create-user.component';
+import { CreateEditUserComponent } from './components/create-edit-user/create-edit-user.component';
+import { ActionType } from '../../../core/enums/ActionType.enum';
 
 @Component({
   selector: 'app-users',
@@ -57,21 +58,27 @@ export class Users {
   }
 
   add() {
-    this.openCreateUserModal().subscribe((res) => {
+    this.openCreateEditUserModal(ActionType.CREATE).subscribe((res) => {
       if (res === '_SAVED') this.fetchUsers();
     });
   }
 
   download() {}
 
-  remove(user_id: string) {
+  remove(user: User) {
     this.openConfirmModal().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
-  edit(user_id: string) {}
-  view(user_id: string) {
-    console.log(user_id);
+
+  edit(user: User) {
+    this.openCreateEditUserModal(ActionType.EDIT, user).subscribe((res) => {
+      if (res === '_SAVED') this.fetchUsers();
+    });
+  }
+
+  view(user: User) {
+    this.openCreateEditUserModal(ActionType.SHOW, user);
   }
 
   openConfirmModal() {
@@ -79,10 +86,14 @@ export class Users {
     return dialogRef.afterClosed();
   }
 
-  openCreateUserModal() {
-    const dialogRef = this.dialog.open(CreateUserComponent, {
+  openCreateEditUserModal(action: ActionType, user?: User) {
+    const dialogRef = this.dialog.open(CreateEditUserComponent, {
       height: 'auto',
       width: '500px',
+      data: {
+        mode: action,
+        user: user,
+      },
     });
     return dialogRef.afterClosed();
   }

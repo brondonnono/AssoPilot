@@ -66,6 +66,8 @@
     "username-title": "Nom d'utilisateur",
     "password-title": "Mot de passe",
     "create-user-heading": "Créer un utilisateur",
+    "edit-user-heading": "Modifier l'utilisateur",
+    "user-details-heading": "Détails de l'utilisateur",
     "select-role-title": "Choisir un rôle",
     "hide-password": "Masquer le mot de passe"
   },

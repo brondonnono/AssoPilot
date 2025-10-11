@@ -1,5 +1,14 @@
 <div class="flex items-center w-full">
-  <h4 mat-dialog-title class="w-5/6">{{ 'users.create-user-heading' | translate }}</h4>
+  <h4 mat-dialog-title class="w-5/6">
+    {{
+      (data.mode === ActionType.CREATE
+        ? 'users.create-user-heading'
+        : data.mode === ActionType.EDIT
+        ? 'users.edit-user-heading'
+        : 'users.user-details-heading'
+      ) | translate
+    }}
+  </h4>
   <button mat-dialog-close matIconButton>
     <i class="ri ri-close-line text-2xl text-blue-500"></i>
   </button>
@@ -26,7 +35,6 @@
             required
           />
           @if (password?.invalid && (password?.dirty || password?.touched)) {
-
           <mat-error>{{
             (password?.hasError('minlength')
               ? 'common.pswd-min-length-msg'
@@ -37,7 +45,7 @@
         </mat-form-field>
       </div>
       <div class="w-full">
-        <mat-form-field class="!w-full">
+        <mat-form-field class="!w-full" di>
           <mat-label>{{ 'users.select-role-title' | translate }}</mat-label>
           <mat-select formControlName="role">
             @for (role of userRoles; track $index) {
@@ -50,6 +58,7 @@
   </form>
 </mat-dialog-content>
 
+@if (canEdit) {
 <mat-dialog-actions>
   <div class="flex justify-between w-full">
     <button
@@ -76,3 +85,4 @@
     </button>
   </div>
 </mat-dialog-actions>
+}
