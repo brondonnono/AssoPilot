@@ -1,0 +1,94 @@
+<div class="flex items-center w-full">
+  <h4 mat-dialog-title class="w-5/6">
+    {{
+      (data.mode === ActionType.CREATE
+        ? 'members.create-member-heading'
+        : data.mode === ActionType.EDIT
+        ? 'members.edit-member-heading'
+        : 'members.member-details-heading'
+      ) | translate
+    }}
+  </h4>
+  <button mat-dialog-close matIconButton>
+    <i class="ri ri-close-line text-2xl text-blue-500"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="memberForm" (submit)="save()">
+    <div class="flex flex-col gap-6 items-center w-full">
+      <div class="flex flex-row gap-2 w-full">
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'members.name-title' | translate }}</mat-label>
+          <input matInput type="text" formControlName="name" required />
+          @if (name?.invalid && (name?.dirty || name?.touched) && name?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'members.phone-title' | translate }}</mat-label>
+          <input matInput type="text" formControlName="phone" required />
+          @if (phone?.invalid && (phone?.dirty || phone?.touched)) {
+          <mat-error>{{
+            (phone?.hasError('minlength') ? 'common.min-length-msg' : 'common.field-required')
+              | translate
+          }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row gap-2 w-full">
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'members.cni-title' | translate }}</mat-label>
+          <input matInput type="text" formControlName="cni" required />
+          @if (cni?.invalid && (cni?.dirty || cni?.touched)) {
+          <mat-error>{{
+            (cni?.hasError('maxlength') || cni?.hasError('minlength')
+              ? 'common.cni-length-msg'
+              : cni?.hasError('pattern')
+              ? 'common.only-number'
+              : 'common.field-required'
+            ) | translate
+          }}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'members.select-status-title' | translate }}</mat-label>
+          <mat-select formControlName="status">
+            @for (status of statusList; track $index) {
+            <mat-option [value]="status">{{ 'members.' + status | translate }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+@if (canEdit) {
+<mat-dialog-actions>
+  <div class="flex justify-between w-full">
+    <button
+      matButton
+      mat-dialog-close
+      [disabled]="isLoading"
+      class=" {{ isLoading ? '!text-gray-300' : '!text-red-600' }}"
+    >
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button matButton [disabled]="memberForm.invalid || isLoading" (click)="save()" cdkFocusInitial>
+      @if (isLoading) {
+      <mat-spinner></mat-spinner>
+      } @else {
+      <div class="flex gap-2 items-center">
+        <i
+          class="ri-save-2-line text-lg  {{
+            memberForm.invalid || isLoading ? '!text-gray-300' : 'text-blue-600'
+          }}"
+        ></i>
+        <span> {{ 'common.save' | translate }}</span>
+      </div>
+      }
+    </button>
+  </div>
+</mat-dialog-actions>
+}

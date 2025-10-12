@@ -46,7 +46,7 @@
       <div class="!flex !gap-2">
         <button
           mat-icon-button
-          (click)="view(row.id)"
+          (click)="view(row)"
           [matTooltip]="'common.view-details' | translate"
           class="!rounded-full hover:!bg-gray-100 !p-2"
         >
@@ -54,7 +54,7 @@
         </button>
         <button
           mat-icon-button
-          (click)="edit(row.id)"
+          (click)="edit(row)"
           [matTooltip]="'common.edit' | translate"
           class="!rounded-full hover:!bg-gray-100 !p-2"
         >
@@ -62,7 +62,7 @@
         </button>
         <button
           mat-icon-button
-          (click)="remove(row.id)"
+          (click)="remove(row)"
           [matTooltip]="'common.delete' | translate"
           class="!rounded-full hover:!bg-gray-100 !p-2"
         >

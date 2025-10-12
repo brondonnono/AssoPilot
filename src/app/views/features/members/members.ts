@@ -11,6 +11,8 @@ import { MockDataService } from '../../../services/MockData.service';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { MemberStatus } from '../../../core/enums/MemberStatus.enum';
+import { CreateEditMemberComponent } from './components/create-edit-member/create-edit-member.component';
+import { ActionType } from '../../../core/enums/ActionType.enum';
 
 @Component({
   selector: 'app-members',
@@ -36,6 +38,10 @@ export class Members {
   constructor(private mockDataService: MockDataService) {}
 
   ngOnInit(): void {
+    this.fetchMembers();
+  }
+
+  fetchMembers() {
     this.isFetchingData = true;
     this.mockDataService.getMembers().subscribe({
       next: (res) => {
@@ -43,7 +49,7 @@ export class Members {
       },
       error: (error) => {
         this.isFetchingData = false;
-        console.log('Get members error: ', error);
+        console.log('Get users error: ', error);
       },
       complete: () => {
         this.isFetchingData = false;
@@ -51,22 +57,44 @@ export class Members {
     });
   }
 
-  add() {}
+  add() {
+    this.openCreateEditMemberModal(ActionType.CREATE).subscribe((res) => {
+      if (res === '_SAVED') this.fetchMembers();
+    });
+  }
 
   download() {}
 
-  remove(user_id: string) {
+  remove(member: Member) {
     this.openConfirmModal().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
-  edit(user_id: string) {}
-  view(user_id: string) {
-    console.log(user_id);
+
+  edit(member: Member) {
+    this.openCreateEditMemberModal(ActionType.EDIT, member).subscribe((res) => {
+      if (res === '_SAVED') this.fetchMembers();
+    });
+  }
+
+  view(member: Member) {
+    this.openCreateEditMemberModal(ActionType.SHOW, member);
   }
 
   openConfirmModal() {
     const dialogRef = this.dialog.open(ConfirmComponent);
+    return dialogRef.afterClosed();
+  }
+
+  openCreateEditMemberModal(action: ActionType, member?: Member) {
+    const dialogRef = this.dialog.open(CreateEditMemberComponent, {
+      height: 'auto',
+      width: '600px',
+      data: {
+        mode: action,
+        member: member,
+      },
+    });
     return dialogRef.afterClosed();
   }
 }

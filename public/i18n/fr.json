@@ -41,7 +41,11 @@
     "logout": "Déconnexion",
     "logout-msg": "Voulez-vous vraiment vous déconnecter ?",
     "field-required": "Champ obligatoire",
-    "pswd-min-length-msg": "Minimum 8 caractères"
+    "pswd-min-length-msg": "Doit avoir minimum 8 caractères",
+    "min-length-msg": "Doit avoir minimum 9 caractères",
+    "cni-length-msg": "Doit avoir 9 caractères",
+    "only-number": "Doit avoir uniquement des chiffres"
+
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",
@@ -87,7 +91,14 @@
     "members-list-label": "Liste des membres",
     "active": "Actif",
     "inactive": "Inactif",
-    "in_review": "En observation"
+    "in_review": "En observation",
+    "create-member-heading": "Créer un membre",
+    "edit-member-heading": "Modifier le membre",
+    "member-details-heading": "Détails du membre",
+    "select-status-title": "Choisir un statut",
+    "name-title": "Nom complet",
+    "phone-title":"Numéro de téléphone",
+    "cni-title": "Numéro de CNI"
   },
 
   "paginator": {
