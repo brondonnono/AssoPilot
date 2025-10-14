@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,6 +10,7 @@ import { ActionType } from '../../../core/enums/ActionType.enum';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
 import { ImportExportDataService } from '../../../services/import-export-data.service';
+import { CreateEditEventComponent } from './components/create-edit-event/create-edit-event.component';
 
 @Component({
   selector: 'app-events',
@@ -36,6 +36,10 @@ export class Events implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.fetchEvents();
+  }
+
+  fetchEvents() {
     this.isFetchingData = true;
     this.mockDataService.getEvents().subscribe({
       next: (res) => {
@@ -51,10 +55,32 @@ export class Events implements OnInit {
     });
   }
 
-  add() {}
+  add() {
+    this.openCreateEditEventModal(ActionType.CREATE).subscribe((res) => {
+      if (res === '_SAVED') this.fetchEvents();
+    });
+  }
 
   download() {
     this.exportDataService.exportToExcel(this.events, 'events.xlsx');
+  }
+
+  edit(event: IEvent) {
+    this.openCreateEditEventModal(ActionType.EDIT, event).subscribe((res) => {
+      if (res === '_SAVED') this.fetchEvents();
+    });
+  }
+
+  openCreateEditEventModal(action: ActionType, event?: IEvent) {
+    const dialogRef = this.dialog.open(CreateEditEventComponent, {
+      height: 'auto',
+      width: '600px',
+      data: {
+        mode: action,
+        event: event,
+      },
+    });
+    return dialogRef.afterClosed();
   }
 
   handleEventAction(event: any) {
