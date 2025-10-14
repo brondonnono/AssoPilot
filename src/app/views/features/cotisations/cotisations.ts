@@ -12,6 +12,7 @@ import { ConfirmComponent } from '../../../shared/components/confirm/confirm.com
 import { Cotisation } from '../../../core/models/Cotisation';
 import { ActionType } from '../../../core/enums/ActionType.enum';
 import { CreateEditCotisationComponent } from './components/create-edit-cotisation/create-edit-cotisation.component';
+import { ImportExportDataService } from '../../../services/import-export-data.service';
 
 @Component({
   selector: 'app-cotisations',
@@ -40,7 +41,10 @@ export class Cotisations {
     'participant_number',
     'actions',
   ];
-  constructor(private mockDataService: MockDataService) {}
+  constructor(
+    private mockDataService: MockDataService,
+    private exportDataService: ImportExportDataService
+  ) {}
 
   ngOnInit(): void {
     this.fetchCotisations();
@@ -71,7 +75,9 @@ export class Cotisations {
     });
   }
 
-  download() {}
+  download() {
+    this.exportDataService.exportToExcel(this.cotisations, 'cotisations.xlsx');
+  }
 
   remove(cotisation: Cotisation) {
     this.openConfirmModal().subscribe((result) => {

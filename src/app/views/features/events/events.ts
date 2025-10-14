@@ -10,6 +10,7 @@ import { EventTable } from '../../../shared/components/event-table/event-table';
 import { ActionType } from '../../../core/enums/ActionType.enum';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
+import { ImportExportDataService } from '../../../services/import-export-data.service';
 
 @Component({
   selector: 'app-events',
@@ -29,7 +30,10 @@ export class Events implements OnInit {
   events: IEvent[] = [];
   isFetchingData = false;
 
-  constructor(private mockDataService: MockDataService) {}
+  constructor(
+    private mockDataService: MockDataService,
+    private exportDataService: ImportExportDataService
+  ) {}
 
   ngOnInit(): void {
     this.isFetchingData = true;
@@ -49,7 +53,9 @@ export class Events implements OnInit {
 
   add() {}
 
-  download() {}
+  download() {
+    this.exportDataService.exportToExcel(this.events, 'events.xlsx');
+  }
 
   handleEventAction(event: any) {
     const { action: action, data } = event;

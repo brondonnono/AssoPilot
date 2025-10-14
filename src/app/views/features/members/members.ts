@@ -13,6 +13,7 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { MemberStatus } from '../../../core/enums/MemberStatus.enum';
 import { CreateEditMemberComponent } from './components/create-edit-member/create-edit-member.component';
 import { ActionType } from '../../../core/enums/ActionType.enum';
+import { ImportExportDataService } from '../../../services/import-export-data.service';
 
 @Component({
   selector: 'app-members',
@@ -35,7 +36,10 @@ export class Members {
   members: Member[] = [];
   isFetchingData = false;
   displayedColumns = ['name', 'phone', 'cni', 'status', 'joined_date', 'actions'];
-  constructor(private mockDataService: MockDataService) {}
+  constructor(
+    private mockDataService: MockDataService,
+    private exportDataService: ImportExportDataService
+  ) {}
 
   ngOnInit(): void {
     this.fetchMembers();
@@ -63,7 +67,9 @@ export class Members {
     });
   }
 
-  download() {}
+  download() {
+    this.exportDataService.exportToExcel(this.members, 'members.xlsx');
+  }
 
   remove(member: Member) {
     this.openConfirmModal().subscribe((result) => {

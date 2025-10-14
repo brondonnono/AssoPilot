@@ -13,6 +13,7 @@ import { ColumnTemplateDirective } from '../../../core/directives/ColumnTemplate
 import { UserRole } from '../../../core/enums/UserRole.enum';
 import { CreateEditUserComponent } from './components/create-edit-user/create-edit-user.component';
 import { ActionType } from '../../../core/enums/ActionType.enum';
+import { ImportExportDataService } from '../../../services/import-export-data.service';
 
 @Component({
   selector: 'app-users',
@@ -35,7 +36,10 @@ export class Users {
   users: User[] = [];
   isFetchingData = false;
   displayedColumns = ['username', 'role', 'created_at', 'actions'];
-  constructor(private mockDataService: MockDataService) {}
+  constructor(
+    private mockDataService: MockDataService,
+    private exportDataService: ImportExportDataService
+  ) {}
 
   ngOnInit(): void {
     this.fetchUsers();
@@ -63,7 +67,9 @@ export class Users {
     });
   }
 
-  download() {}
+  download() {
+    this.exportDataService.exportToExcel(this.users, 'users.xlsx');
+  }
 
   remove(user: User) {
     this.openConfirmModal().subscribe((result) => {
