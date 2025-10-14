@@ -10,6 +10,8 @@ import { TableComponent } from '../../../shared/components/table/table.component
 import { MockDataService } from '../../../services/MockData.service';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
 import { Cotisation } from '../../../core/models/Cotisation';
+import { ActionType } from '../../../core/enums/ActionType.enum';
+import { CreateEditCotisationComponent } from './components/create-edit-cotisation/create-edit-cotisation.component';
 
 @Component({
   selector: 'app-cotisations',
@@ -41,6 +43,10 @@ export class Cotisations {
   constructor(private mockDataService: MockDataService) {}
 
   ngOnInit(): void {
+    this.fetchCotisations();
+  }
+
+  fetchCotisations() {
     this.isFetchingData = true;
     this.mockDataService.getCotisations().subscribe({
       next: (res) => {
@@ -59,22 +65,44 @@ export class Cotisations {
     });
   }
 
-  add() {}
+  add() {
+    this.openCreateEditCotisationModal(ActionType.CREATE).subscribe((res) => {
+      if (res === '_SAVED') this.fetchCotisations();
+    });
+  }
 
   download() {}
 
-  remove(user_id: string) {
+  remove(cotisation: Cotisation) {
     this.openConfirmModal().subscribe((result) => {
       console.log(`Dialog result: ${result}`);
     });
   }
-  edit(user_id: string) {}
-  view(user_id: string) {
-    console.log(user_id);
+
+  edit(cotisation: Cotisation) {
+    this.openCreateEditCotisationModal(ActionType.EDIT, cotisation).subscribe((res) => {
+      if (res === '_SAVED') this.fetchCotisations();
+    });
+  }
+
+  view(cotisation: Cotisation) {
+    this.openCreateEditCotisationModal(ActionType.SHOW, cotisation);
   }
 
   openConfirmModal() {
     const dialogRef = this.dialog.open(ConfirmComponent);
+    return dialogRef.afterClosed();
+  }
+
+  openCreateEditCotisationModal(action: ActionType, cotisation?: Cotisation) {
+    const dialogRef = this.dialog.open(CreateEditCotisationComponent, {
+      height: 'auto',
+      width: '600px',
+      data: {
+        mode: action,
+        cotisation: cotisation,
+      },
+    });
     return dialogRef.afterClosed();
   }
 }

@@ -4,6 +4,13 @@
     "super_admin": "Administrateur",
     "root": "Developpeur"
   },
+  "period": {
+    "month": "Mois",
+    "day": "Jour",
+    "week": "Semaine",
+    "year": "Année",
+    "custom_period": "Période personnalisée"
+  },
 
   "common": {
     "actions": "Action(s)",
@@ -43,8 +50,12 @@
     "field-required": "Champ obligatoire",
     "pswd-min-length-msg": "Doit avoir minimum 8 caractères",
     "min-length-msg": "Doit avoir minimum 9 caractères",
+    "min-value-msg": "Minimum 1000 FCFA",
     "cni-length-msg": "Doit avoir 9 caractères",
-    "only-number": "Doit avoir uniquement des chiffres"
+    "only-number": "Doit avoir uniquement des chiffres",
+    "min-selected-error": "Sélectionner au moins 2 membres",
+    "other": "Autre",
+    "others": "Autres"
 
   },
   "sidebar": {
@@ -63,7 +74,6 @@
     "heading-title": "Évènements",
     "events-list-label": "Liste des évènements"
   },
-
   "users": {
     "heading-title": "Utilisateurs",
     "users-list-label": "Liste des utilisateurs",
@@ -98,7 +108,8 @@
     "select-status-title": "Choisir un statut",
     "name-title": "Nom complet",
     "phone-title":"Numéro de téléphone",
-    "cni-title": "Numéro de CNI"
+    "cni-title": "Numéro de CNI",
+    "select-members": "Selectionner les membres"
   },
 
   "paginator": {

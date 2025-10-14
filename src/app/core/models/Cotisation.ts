@@ -1,10 +1,12 @@
+import { Member } from './Member';
+
 export interface Cotisation {
   id: string;
   title: string;
   amount: number;
   frequency: string;
   start_date: string;
-  members: string[];
+  members: Member[];
   created_at: string;
   updated_at: string;
 }
