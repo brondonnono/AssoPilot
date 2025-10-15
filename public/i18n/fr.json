@@ -63,7 +63,8 @@
     "nav-users-title": "Utilisateurs",
     "nav-members-title": "Membres",
     "nav-cotisations-title": "Cotisations",
-    "nav-events-title": "Évènements"
+    "nav-events-title": "Évènements",
+    "nav-user-logs-title": "Historique d'utilisation"
   },
   "dashboard": {
     "heading-title": "Tableau de bord",
