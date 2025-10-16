@@ -55,7 +55,9 @@
     "only-number": "Doit avoir uniquement des chiffres",
     "min-selected-error": "Sélectionner au moins 2 membres",
     "other": "Autre",
-    "others": "Autres"
+    "others": "Autres",
+    "user": "Utilisateur",
+    "action": "Détails"
 
   },
   "sidebar": {
@@ -64,7 +66,7 @@
     "nav-members-title": "Membres",
     "nav-cotisations-title": "Cotisations",
     "nav-events-title": "Évènements",
-    "nav-user-logs-title": "Historique d'utilisation"
+    "nav-user-logs-title": "Journal d'actions"
   },
   "dashboard": {
     "heading-title": "Tableau de bord",

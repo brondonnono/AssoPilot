@@ -1,1 +1,30 @@
-<p>logs works!</p>
+<div class="pb-9">
+  <h1 class="text-xl font-semibold">
+    {{ 'logs.heading-title' | translate }}
+  </h1>
+</div>
+<div class="flex flex-col gap-3 items-center shadow-md p-4">
+  <div class="flex justify-between items-center w-full">
+    <h1 class="text-lg">
+      {{ 'logs.logs-list-label' | translate }}
+    </h1>
+    <div class="flex gap-1">
+      <button mat-icon-button (click)="download()" [matTooltip]="'common.download' | translate">
+        <i class="ri-download-line !text-green-600 !text-lg"></i>
+      </button>
+    </div>
+  </div>
+  @if (!isFetchingData) {
+  <app-table
+    class="w-full"
+    [data]="logs"
+    [withSearch]="true"
+    [withPagination]="true"
+    [displayedColumns]="displayedColumns"
+  >
+    <ng-template appColumnTemplate="created_at" let-row>
+      {{ row.created_at | date }}
+    </ng-template>
+  </app-table>
+  }
+</div>
