@@ -1,9 +1,9 @@
 <mat-card class="px-4 pt-2 pb-3 h-20 {{ bgColor }}">
   <div class="flex justify-between items-center">
-    <h1 class="mb-2 text-lg font-semibold">{{ metric.title }}</h1>
+    <h1 class="mb-2 text-lg font-semibold">{{ metric.title | translate }}</h1>
     <button
       mat-icon-button
-      matTooltip="Informations"
+      [matTooltip]="metric.description | translate"
       class="!rounded-full hover:!bg-gray-100 !px-1"
     >
       <i class="ri-information-2-line text-xl"></i>
@@ -11,6 +11,6 @@
   </div>
   <div class="flex justify-between items-center">
     <span class="font-semibold">{{ metric.value }}</span>
-    <i class="ri-group-line text-lg pr-1"></i>
+    <i class="{{ metric.icon }} text-2xl pr-1"></i>
   </div>
 </mat-card>

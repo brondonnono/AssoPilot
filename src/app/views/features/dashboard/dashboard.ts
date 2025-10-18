@@ -7,6 +7,7 @@ import { Event as IEvent } from '../../../core/models/Event';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
+import { Metric } from '../../../core/models/Metric';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,9 +19,16 @@ export class Dashboard implements OnInit {
   upcomingEvents: IEvent[] = [];
   isFetchingData = true;
 
+  metrics: Metric[] = [];
+
   constructor(private mockDataService: MockDataService) {}
 
   ngOnInit(): void {
+    this.fetchUpcomingEvents();
+    this.getStatistics();
+  }
+
+  fetchUpcomingEvents() {
     this.isFetchingData = true;
     this.mockDataService.getEvents().subscribe({
       next: (events) => {
@@ -34,5 +42,11 @@ export class Dashboard implements OnInit {
         this.isFetchingData = false;
       },
     });
+  }
+
+  getStatistics() {
+    this.isFetchingData = true;
+    this.metrics = this.mockDataService.getStatistics();
+    this.isFetchingData = false;
   }
 }

@@ -6,6 +6,7 @@ import { Member } from '../core/models/Member';
 import { User } from '../core/models/User';
 import { Event } from '../core/models/Event';
 import { Log } from '../core/models/Log';
+import { Metric } from '../core/models/Metric';
 
 @Injectable({
   providedIn: 'root',
@@ -41,5 +42,40 @@ export class MockDataService {
       if (today < startEventDate) upcomingEvents.push(_event);
     });
     return upcomingEvents;
+  }
+
+  getStatistics(): Metric[] {
+    const metrics: Metric[] = [
+      {
+        title: 'common.users',
+        description: 'common.user-stat',
+        value: '03',
+        icon: 'ri-group-2-line',
+        bgColor: '!bg-green-300',
+      },
+      {
+        title: 'common.events',
+        description: 'common.event-stat',
+        value: '10',
+        icon: 'ri-calendar-event-line',
+        bgColor: '!bg-orange-300',
+      },
+      {
+        title: 'common.cotisations',
+        description: 'common.cotisation-stat',
+        value: '05',
+        icon: 'ri-wallet-3-line',
+        bgColor: '!bg-purple-300',
+      },
+      {
+        title: 'common.members',
+        description: 'common.member-stat',
+        value: '30',
+        icon: 'ri-team-line',
+        bgColor: '!bg-blue-300',
+      },
+    ];
+
+    return metrics;
   }
 }

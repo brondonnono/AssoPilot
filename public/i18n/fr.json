@@ -57,7 +57,15 @@
     "other": "Autre",
     "others": "Autres",
     "user": "Utilisateur",
-    "action": "Détails"
+    "action": "Détails",
+    "users": "Utilisateurs",
+    "events": "Évènements",
+    "cotisations": "Cotisations",
+    "user-stat": "Nombre total d'utilisateur",
+    "member-stat": "Nombre total de membre inscrit",
+    "cotisation-stat": "Nombre total de cotisation",
+    "event-stat": "Nombre total d'évènements",
+    "members": "Membres"
 
   },
   "sidebar": {
