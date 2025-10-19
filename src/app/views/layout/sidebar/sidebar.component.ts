@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
       id: '1',
       username: 'Brondon Nono',
       password: '',
-      role: UserRole.SUPER_ADMIN,
+      role: UserRole.ADMIN,
       created_at: '',
     };
   }
