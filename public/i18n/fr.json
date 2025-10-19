@@ -104,7 +104,10 @@
 
   "cotisations": {
     "heading-title": "Cotisations",
-    "cotisations-list-label": "Liste des cotisations"
+    "cotisations-list-label": "Liste des cotisations",
+    "cotisation-details-heading": "Détails de la cotisation",
+    "create-cotisation-heading": "Créer une cotisation",
+    "edit-cotisation-heading": "Modifier la cotisation"
   },
 
   "members": {

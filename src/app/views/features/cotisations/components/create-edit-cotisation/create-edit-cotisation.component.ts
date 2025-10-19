@@ -65,9 +65,9 @@ export class CreateEditCotisationComponent implements OnInit {
 
   ngOnInit(): void {
     this.canEdit = this.data.mode !== ActionType.SHOW;
+    this.initForm();
     if (this.data.mode !== ActionType.CREATE && this.data.cotisation)
       this.patchForm(this.data.cotisation);
-    else this.initForm();
     this.fetchMembers();
   }
 
@@ -100,29 +100,25 @@ export class CreateEditCotisationComponent implements OnInit {
       members: [[], [Validators.required, this.minSelectedMembersValidator(2)]],
     });
     this.cotisationForm.get('start_date')?.disable();
-    if (!this.canEdit) this.cotisationForm.disable();
+    if (!this.canEdit) {
+      this.cotisationForm.disable();
+      this.cotisationForm.get('members')?.enable();
+    }
   }
 
   patchForm(cotisationData: Cotisation) {
-    this.cotisationForm = this.fb.group({
-      title: [cotisationData.title, Validators.required],
-      amount: [cotisationData.amount, [Validators.required, Validators.min(1000)]],
-      frequency: [cotisationData.frequency, Validators.required],
-      start_date: [new Date(cotisationData.start_date), [Validators.required]],
-      members: [cotisationData.members, [Validators.required, this.minSelectedMembersValidator(2)]],
-    });
-    this.cotisationForm.patchValue({
-      members: cotisationData.members,
-    });
     this.cotisationForm.get('start_date')?.disable();
-    if (!this.canEdit) this.cotisationForm.disable();
-    /*this.cotisationForm.patchValue({
+    if (!this.canEdit) {
+      this.cotisationForm.disable();
+      this.cotisationForm.get('members')?.enable();
+    }
+    this.cotisationForm.patchValue({
       title: cotisationData.title,
       amount: cotisationData.amount,
       frequency: cotisationData.frequency,
       start_date: cotisationData.start_date,
       members: cotisationData.members,
-    });*/
+    });
   }
 
   compareMembers(m1: Member, m2: Member): boolean {
