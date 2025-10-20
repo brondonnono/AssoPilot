@@ -29,7 +29,7 @@ body {
   // Set a default background, font and text colors for the application using
   // Angular Material's system-level CSS variables. Learn more about these
   // variables at https://material.angular.dev/guide/system-variables
-  //background-color: var(--mat-sys-surface);
+  background: #f6f9ff;
   color: var(--mat-sys-on-surface);
   font: var(--mat-sys-body-medium);
 
@@ -61,6 +61,10 @@ body {
 html,
 body {
   height: 100%;
-  background-color: rgb(238, 238, 238);
+  background-color: #f6f9ff;
   font-family: 'Poppins', sans-serif;
+}
+
+.default-bg {
+  background-color: #f6f9ff !important;
 }
