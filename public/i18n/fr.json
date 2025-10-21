@@ -133,5 +133,11 @@
     "first-page": "Première page",
     "last-page": "Dernière page",
     "range-page": "{{start}} - {{end}} sur {{length}}"
+  },
+
+  "login": {
+    "heading": "Connectez-vous à votre compte",
+    "description": "Entrez votre nom d'utilisateur et votre mot de passe pour vous connecter",
+    "connect-btn": "Se connecter"
   }
 }

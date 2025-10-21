@@ -1,12 +1,13 @@
 import { Component, signal } from '@angular/core';
-import { LayoutComponent } from './views/layout/layout.component';
+import { RouterOutlet } from '@angular/router';
+import { AppTitle } from './core/utils/const';
 
 @Component({
   selector: 'app-root',
-  imports: [LayoutComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('AssoPilot');
+  protected readonly title = signal(AppTitle);
 }

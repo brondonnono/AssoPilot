@@ -10,6 +10,7 @@ import { AuthService } from '../../../services/auth-service';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
 import { MatDialog } from '@angular/material/dialog';
 import { logout } from '../../../core/state/auth/auth.actions';
+import { AppTitle } from '../../../core/utils/const';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,7 @@ import { logout } from '../../../core/state/auth/auth.actions';
 export class HeaderComponent {
   readonly dialog = inject(MatDialog);
   @Output() sidebarToggle = new EventEmitter<void>();
-  appName = 'ASSOPILOT';
+  appName = AppTitle.toUpperCase();
   currentUser!: User;
 
   constructor(private authService: AuthService) {
