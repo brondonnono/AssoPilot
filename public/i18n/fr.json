@@ -65,8 +65,8 @@
     "member-stat": "Nombre total de membre inscrit",
     "cotisation-stat": "Nombre total de cotisation",
     "event-stat": "Nombre total d'évènements",
-    "members": "Membres"
-
+    "members": "Membres",
+    "author": "<span>Réalisé par <a class='font-semibold text-blue-600' href='https://www.brondonnono.me'>Brondon Nono</a></span>"
   },
   "sidebar": {
     "nav-dashboard-title": "Tableau de bord",
