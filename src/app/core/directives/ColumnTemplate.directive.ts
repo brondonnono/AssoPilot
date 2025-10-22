@@ -6,6 +6,5 @@ import { Directive, Input, TemplateRef } from '@angular/core';
 })
 export class ColumnTemplateDirective {
   @Input('appColumnTemplate') column!: string;
-
   constructor(public template: TemplateRef<any>) {}
 }

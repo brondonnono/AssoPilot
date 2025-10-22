@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Expose seulement les fonctions nécessaires au front Angular
 contextBridge.exposeInMainWorld('electronAPI', {
-  send: (channel, data) => ipcRenderer.send(channel, data),
-  on: (channel, callback) => ipcRenderer.on(channel, (event, ...args) => callback(...args)),
+  openDialog: (options) => ipcRenderer.invoke('open-dialog', options),
+  runQuery: (query, params) => ipcRenderer.invoke('run-query', query, params),
+  getAppVersion: () => ipcRenderer.invoke('get-app-version'),
 });
