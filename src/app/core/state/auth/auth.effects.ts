@@ -1,37 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { of } from 'rxjs';
-import { map, mergeMap, catchError } from 'rxjs/operators';
 import * as AuthActions from './auth.actions';
-import { AuthService } from '../../../services/auth-service';
-import { User } from '../../models/User';
+import { mergeMap } from 'rxjs';
+import { ElectronService } from '../../../services/electron.service';
 
 @Injectable()
 export class AuthEffects {
-    constructor(
-        private actions$: Actions,
-        private authService: AuthService
-    ) { }
+  private actions$ = inject(Actions);
+  private electron = inject(ElectronService);
 
-    login$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(AuthActions.login),
-            mergeMap(action =>
-                this.authService.login(action.username, action.password).pipe(
-                    map((user: User) => AuthActions.loginSuccess({ user })),
-                    catchError(() => of(AuthActions.loginFailure()))
-                )
-            )
-        )
-    );
-
-    logout$ = createEffect(() =>
-        this.actions$.pipe(
-            ofType(AuthActions.logout),
-            map(() => {
-                this.authService.logout();
-                return AuthActions.logoutSuccess();
-            })
-        )
-    );
+  login$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(AuthActions.login),
+      mergeMap((action) =>
+        this.electron
+          .login(action.username, action.password)
+          .then((res) =>
+            res.success
+              ? AuthActions.loginSuccess({ user: res.user })
+              : AuthActions.loginFailure({ error: res.message ?? '' })
+          )
+          .catch((err) => AuthActions.loginFailure({ error: err.message }))
+      )
+    )
+  );
 }

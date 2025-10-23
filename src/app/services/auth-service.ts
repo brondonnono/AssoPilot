@@ -1,33 +1,26 @@
-import { Injectable } from '@angular/core';
-import { of, throwError } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
 import { User } from '../core/models/User';
 import { MockDataService } from './MockData.service';
+import { ElectronService } from './electron.service';
+
+export interface AuthResponse {
+  success: boolean;
+  message?: string;
+  user?: { id: string; username: string; role: string };
+}
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private mockDataService: MockDataService) { }
+  private mockDataService = inject(MockDataService);
+  private electronService = inject(ElectronService);
+
   private currentUser: User | null = null;
 
-  login(username: string, password: string) {
-    // replace by sqlite login code
-    let user: User | undefined;
-    this.mockDataService.getUsers().subscribe({
-      next: (users: User[]) => {
-        user = users.find(
-          (u) => u.username === username && u.password === password
-        );
-      },
-      error: (error) => {
-        return throwError(() => new Error(error));
-      },
-      complete: () => { }
-    });
-    if (user) {
-      return of(user);
-    } else {
-      return throwError(() => new Error('Invalid username or password'));
+  async login(username: string, password: string): Promise<AuthResponse> {
+    if (!this.electronService.isElectron) {
+      return { success: false, message: 'Login uniquement disponible en mode desktop' };
     }
-
+    return await this.electronService.runQuery('login', [username, password]);
   }
 
   logout() {

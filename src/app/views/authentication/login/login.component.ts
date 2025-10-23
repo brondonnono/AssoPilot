@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppTitle } from '../../../core/utils/const';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { AuthService } from '../../../services/auth-service';
 
 @Component({
   selector: 'app-login',
@@ -36,8 +37,8 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isLoading = false;
   hide = signal(true);
-
-  constructor(private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
 
   ngOnInit() {
     this.initForm();
@@ -62,5 +63,16 @@ export class LoginComponent implements OnInit {
     if (this.isLoading) this.loginForm.disable();
   }
 
-  login() {}
+  async login() {
+    const response = await this.authService.login(
+      this.username?.value ?? '',
+      this.password?.value ?? ''
+    );
+    if (response.success) {
+      console.log('Login réussi', response.user);
+      // stocker user dans NgRx / localStorage pour session
+    } else {
+      console.warn(response.message);
+    }
+  }
 }

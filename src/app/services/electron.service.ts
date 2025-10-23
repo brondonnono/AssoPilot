@@ -1,12 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@angular/core';
+import { OpenDialogOptions } from 'electron';
+import { User } from '../core/models/User';
 
 declare global {
   interface Window {
     electronAPI?: {
-      openDialog: (options: any) => Promise<string[]>;
-      runQuery?: (query: string, params?: any[]) => Promise<any>;
-      getAppVersion?: () => Promise<string>;
+      openDialog: (options: OpenDialogOptions) => Promise<string[]>;
+      login: (
+        username: string,
+        password: string
+      ) => Promise<{
+        success: boolean;
+        user?: User;
+        message?: string;
+      }>;
+      runQuery: (query: string, params?: any[]) => Promise<any>;
+      getAppVersion: () => Promise<string>;
     };
   }
 }
@@ -35,5 +45,10 @@ export class ElectronService {
   async getAppVersion(): Promise<string> {
     if (!this.isElectron || !this.api?.getAppVersion) return 'web-dev';
     return await this.api.getAppVersion();
+  }
+
+  async login(username: string, password: string) {
+    if (!this.api?.login) return { success: false, message: 'Electron API non disponible' };
+    return await this.api.login(username, password);
   }
 }
