@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
 
 // Garde une référence globale de la fenêtre (évite la fermeture automatique)
 let mainWindow;
@@ -50,24 +52,28 @@ function createWindow() {
 }
 
 // Création table et utilisateur root au premier lancement
-function initializeDatabase() {
+async function initializeDatabase() {
   db.serialize(() => {
     db.run(`
       CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        id TEXT PRIMARY KEY,
         username TEXT UNIQUE NOT NULL,
         password TEXT NOT NULL,
-        role TEXT NOT NULL
+        role TEXT NOT NULL,
+        created_at TEXT NOT NULL
       )
     `);
 
     // Vérifie si un utilisateur root existe
-    db.get(`SELECT * FROM users WHERE username = ?`, ['root'], (err, row) => {
+    db.get(`SELECT * FROM users WHERE username = ?`, ['root'], async (err, row) => {
       if (err) return console.error(err);
       if (!row) {
-        // insert user root par défaut
-        const stmt = db.prepare(`INSERT INTO users (username, password, role) VALUES (?, ?, ?)`);
-        stmt.run('root', 'root237', 'root', function (err) {
+        const id = uuidv4();
+        const createdAt = new Date().toISOString();
+        const hashedPassword = await bcrypt.hash('root_237', 10);
+
+        const stmt = db.prepare(`INSERT INTO users (id, username, password, role, created_at) VALUES (?, ?, ?, ?, ?)`);
+        stmt.run(id, 'root', hashedPassword, 'root', createdAt, function (err) {
           if (err) console.error('Erreur insertion root:', err);
           else console.log('Utilisateur root créé avec succès');
         });
@@ -89,6 +95,22 @@ ipcMain.handle('run-query', async (_, query, params = []) => {
     db.all(query, params, (err, rows) => {
       if (err) reject(err);
       else resolve(rows);
+    });
+  });
+});
+
+//Login offline
+
+ipcMain.handle('login', async (_, username, password) => {
+  return new Promise((resolve, reject) => {
+    db.get(`SELECT * FROM users WHERE username = ?`, [username], async (err, user) => {
+      if (err) return reject(err);
+      if (!user) return resolve({ success: false, message: 'Utilisateur non trouvé' });
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) return resolve({ success: false, message: 'Mot de passe incorrect' });
+
+      resolve({ success: true, user: { id: user.id, username: user.username, role: user.role } });
     });
   });
 });
