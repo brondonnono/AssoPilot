@@ -3,4 +3,13 @@ export enum ActionType {
   SHOW = 'show',
   EDIT = 'edit',
   DELETE = 'delete',
+  ATTACH = 'attach',
+  DETACH = 'detach',
+}
+
+export enum TargetType {
+  MEMBER = 'member',
+  EVENT = 'event',
+  USER = 'user',
+  COTISATION = 'cotisation',
 }

@@ -14,8 +14,17 @@ export class MemberService {
     const id = crypto.randomUUID();
     const created_at = new Date().toISOString();
     await this.electron.runQuery(
-      `INSERT INTO members (id,name,phone,cni,status,joined_date,created_at) VALUES (?,?,?,?,?,?,?)`,
-      [id, member.name, member.phone, member.cni, member.status, member.joined_date, created_at]
+      `INSERT INTO members (id,name,phone,cni,status,joined_date,created_at,updated_at) VALUES (?,?,?,?,?,?,?)`,
+      [
+        id,
+        member.name,
+        member.phone,
+        member.cni,
+        member.status,
+        member.joined_date,
+        created_at,
+        created_at,
+      ]
     );
   }
 
