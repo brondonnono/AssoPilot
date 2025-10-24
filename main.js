@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Menu, screen, ipcMain, dialog } = require('electron');
 const { initDatabase, runQuery } = require('./database');
 const path = require('path');
 
@@ -7,9 +7,10 @@ let mainWindow;
 
 // 🔧 Fonction pour créer la fenêtre principale
 function createWindow() {
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize; 
   mainWindow = new BrowserWindow({
-    width: 1280,
-    height: 800,
+    width: width,
+    height: height,
     minWidth: 1000,
     minHeight: 700,
     backgroundColor: '#ffffff',
