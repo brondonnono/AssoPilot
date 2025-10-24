@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ActionType, TargetType } from '../core/enums/ActionType.enum';
@@ -6,6 +7,7 @@ import { User } from '../core/models/User';
 import { selectUser } from '../core/state/auth/auth.selector';
 import { ElectronService } from './electron.service';
 import { LogService } from './log.service';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable({
   providedIn: 'root',
@@ -24,13 +26,19 @@ export class UserService {
     return await this.electron.runQuery('SELECT * FROM users');
   }
 
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  }
+
   async add(user: Omit<User, 'id' | 'created_at'>) {
     if (this.currentUser) {
       const id = crypto.randomUUID();
       const created_at = new Date().toISOString();
+      const hashedPassword = await this.hashPassword(user.password);
       await this.electron.runQuery(
         `INSERT INTO users (id,username,password,created_at) VALUES (?,?,?,?)`,
-        [id, user.username, user.password, created_at]
+        [id, user.username, hashedPassword, created_at]
       );
       await this.logService.add(
         ActionType.CREATE.toUpperCase() + '_' + TargetType.USER.toUpperCase(),

@@ -1,9 +1,9 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const { initDatabase, runQuery } = require('./database');
+const path = require('path');
 
 // Garde une référence globale de la fenêtre (évite la fermeture automatique)
 let mainWindow;
-
 
 // 🔧 Fonction pour créer la fenêtre principale
 function createWindow() {
@@ -17,42 +17,31 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, // sécurité
-      nodeIntegration: false,
-      sandbox: false
-    }
+      nodeIntegration: true,
+      sandbox: false,
+    },
   });
 
-  // En dev → charge Angular via localhost
-  if (!app.isPackaged) {
-    mainWindow.loadURL('http://localhost:4200');
-    mainWindow.webContents.openDevTools();
-  } else {
-    // En prod → charge les fichiers buildés Angular
-    mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
-  }
+  Menu.setApplicationMenu(null);
+
+  mainWindow.loadFile('loader.html');
+
+  setTimeout(() => {
+    // En dev → charge Angular via localhost
+    if (!app.isPackaged) {
+      mainWindow.loadURL('http://localhost:4200');
+    //  mainWindow.webContents.openDevTools();
+    } else {
+      // En prod → charge les fichiers buildés Angular
+      mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
+    }
+  }, 5000);
 
   // Initialise la base SQLite
   initDatabase();
-  
+
   mainWindow.on('closed', () => (mainWindow = null));
 }
-
-
-// 💬 Exemple de communication IPC (Angular → Electron → Angular)
-ipcMain.handle('open-dialog', async (_, options) => {
-  const result = await dialog.showOpenDialog(mainWindow, options);
-  return result.filePaths;
-});
-
-// IPC Handlers pour Angular
-ipcMain.handle('run-query', async (_, query, params = []) => {
-  return new Promise((resolve, reject) => {
-    db.all(query, params, (err, rows) => {
-      if (err) reject(err);
-      else resolve(rows);
-    });
-  });
-});
 
 //Login offline
 
@@ -81,4 +70,3 @@ app.on('activate', () => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-
