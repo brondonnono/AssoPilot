@@ -34,18 +34,24 @@
           }
         </mat-form-field>
       </div>
-      <div class="flex flex-row gap-2 w-full">
-        <mat-form-field class="!w-1/2">
-          <mat-label>{{ 'common.start_date' | translate }}</mat-label>
-          <input matInput [matDatepicker]="dp" formControlName="start_date" />
-          <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-          <mat-datepicker #dp [disabled]="!canEdit"></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="!w-1/2">
-          <mat-label>{{ 'common.end_date' | translate }}</mat-label>
-          <input matInput [matDatepicker]="dp" formControlName="end_date" />
-          <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
-          <mat-datepicker #dp1 [disabled]="!canEdit"></mat-datepicker>
+      <div class="w-full">
+        <mat-form-field class="!w-full">
+          <mat-label
+            >{{ 'common.start_date' | translate }} - {{ 'common.end_date' | translate }}</mat-label
+          >
+          <mat-date-range-input [formGroup]="eventForm" [rangePicker]="picker">
+            <input matStartDate formControlName="start_date" />
+            <input matEndDate formControlName="end_date" />
+          </mat-date-range-input>
+          <mat-hint>{{ dateFormat }}</mat-hint>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          @if (start_date?.hasError('matStartDateInvalid')) {
+          <mat-error>{{ 'common.start_date_invalid' | translate }}</mat-error>
+          } @if (end_date?.hasError('matEndDateInvalid')) {
+          <mat-error>{{ 'common.end_date_invalid' | translate }}</mat-error>
+          }
         </mat-form-field>
       </div>
       <div class="w-full">
@@ -64,12 +70,8 @@
       </div>
       <div class="w-full">
         <mat-form-field class="!w-full">
-          <mat-label>{{ 'members.description' | translate }}</mat-label>
-          <textarea matInput placeholder="description"></textarea>
-          @if (description?.invalid && (description?.dirty || description?.touched) &&
-          description?.hasError('required')) {
-          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
-          }
+          <mat-label>{{ 'common.description' | translate }}</mat-label>
+          <textarea matInput></textarea>
         </mat-form-field>
       </div>
     </div>

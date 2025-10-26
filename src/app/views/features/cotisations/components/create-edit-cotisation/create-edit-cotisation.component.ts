@@ -25,6 +25,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NotificationsService } from '../../../../../services/notifications.service';
 import { CotisationService } from '../../../../../services/cotisation.service';
+import { MemberService } from '../../../../../services/member.service';
 
 @Component({
   selector: 'app-create-edit-cotisation',
@@ -62,6 +63,7 @@ export class CreateEditCotisationComponent implements OnInit {
   private fb = inject(FormBuilder);
   public dialogRef = inject(MatDialogRef<CreateEditCotisationComponent>);
   cotisationService = inject(CotisationService);
+  memberService = inject(MemberService);
   notificationService = inject(NotificationsService);
 
   ngOnInit(): void {
@@ -69,6 +71,18 @@ export class CreateEditCotisationComponent implements OnInit {
     this.initForm();
     if (this.data.mode !== ActionType.CREATE && this.data.cotisation)
       this.patchForm(this.data.cotisation);
+  }
+
+  async fetchMembers() {
+    this.isFetchingData = true;
+    try {
+      this.membersList = await this.memberService.getAll();
+    } catch (error) {
+      console.error('Get members error: ', error);
+      this.notificationService.showMessage('Error fetching members', true);
+    } finally {
+      this.isFetchingData = false;
+    }
   }
 
   get title() {
@@ -104,6 +118,7 @@ export class CreateEditCotisationComponent implements OnInit {
       this.cotisationForm.disable();
       this.cotisationForm.get('members')?.enable();
     }
+    this.fetchMembers();
   }
 
   patchForm(cotisationData: Cotisation) {

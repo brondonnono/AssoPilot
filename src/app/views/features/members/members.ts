@@ -48,7 +48,6 @@ export class Members implements OnInit {
     this.isFetchingData = true;
     try {
       this.members = await this.memberService.getAll();
-      console.log(this.members);
     } catch (error) {
       console.error('Get members error: ', error);
       this.notificationService.showMessage('Error fetching members', true);
