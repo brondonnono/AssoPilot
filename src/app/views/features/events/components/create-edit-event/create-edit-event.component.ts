@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -20,9 +20,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { TranslatePipe } from '@ngx-translate/core';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { MemberService } from '../../../../../services/member.service';
 
 @Component({
@@ -40,7 +39,7 @@ import { MemberService } from '../../../../../services/member.service';
     MatDatepickerModule,
     TranslatePipe,
   ],
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'fr-FR' }, provideMomentDateAdapter()],
+  providers: [provideNativeDateAdapter()],
   templateUrl: './create-edit-event.component.html',
   styleUrl: './create-edit-event.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -52,25 +51,18 @@ export class CreateEditEventComponent implements OnInit {
   isLoading = false;
   isFetchingData = false;
   canEdit = false;
-  readonly dateFormat = 'JJ/MM/AAAA - JJ/MM/AAAA';
+  readonly dateFormat = '/MM/JJ/AAAA - MM/JJ/AAAA';
   data: {
     mode: ActionType;
     event?: IEvent;
   } = inject(MAT_DIALOG_DATA);
-  private readonly _adapter = inject<DateAdapter<unknown, unknown>>(DateAdapter);
-  private readonly _locale = signal(inject<unknown>(MAT_DATE_LOCALE));
   private fb = inject(FormBuilder);
   public dialogRef = inject(MatDialogRef<CreateEditEventComponent>);
   eventService = inject(EventService);
   notificationService = inject(NotificationsService);
   memberService = inject(MemberService);
-  translate = inject(TranslateService);
 
   ngOnInit(): void {
-    if (this.translate.getCurrentLang() === 'en') {
-      this._adapter.setLocale('en-US');
-      this._locale.set('en');
-    }
     this.canEdit = this.data.mode !== ActionType.SHOW;
     this.initForm();
     if (this.data.mode !== ActionType.CREATE && this.data.event) this.patchForm(this.data.event);
