@@ -1,6 +1,8 @@
 {
   "name": "asso-pilot",
   "version": "1.0.0",
+  "description": "Application moderne pour gérer facilement votre association, ses membres, ses cotisations et ses activités.",
+  "author": "Brondon Nono",
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -8,10 +10,9 @@
     "start": "ng serve",
     "serve": "concurrently \"npm run start\" \"npm run electron:watch\"",
     "electron:watch": "wait-on http://localhost:4200 && electron .",
-    "build": "ng build --base-href ./",
+    "build": "ng build --configuration production",
     "electron:start": "npm run build && electron .",
     "electron:build": "npm run build && electron-builder",
-    "electron:ng-build": "ng build && tsc -p electron/tsconfig.json",
     "test": "ng test",
     "lint": "ng lint"
   },
@@ -43,7 +44,6 @@
     "@ngx-translate/core": "^17.0.0",
     "@ngx-translate/http-loader": "^17.0.0",
     "@tailwindcss/postcss": "^4.1.13",
-    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "file-saver": "^2.0.5",
     "ngrx-store-localstorage": "^20.0.0",
@@ -54,13 +54,17 @@
     "tailwindcss": "^4.1.13",
     "tslib": "^2.3.0",
     "uuid": "^13.0.0",
-    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular/build": "^20.3.3",
     "@angular/cli": "^20.3.3",
     "@angular/compiler-cli": "^20.3.0",
+    "@electron-forge/cli": "^7.10.2",
+    "@electron-forge/maker-deb": "^7.10.2",
+    "@electron-forge/maker-rpm": "^7.10.2",
+    "@electron-forge/maker-squirrel": "^7.10.2",
+    "@electron-forge/maker-zip": "^7.10.2",
     "@types/electron": "^1.4.38",
     "@types/uuid": "^10.0.0",
     "angular-eslint": "20.4.0",
@@ -81,8 +85,8 @@
     },
     "files": [
       "dist/asso-pilot/**/*",
-      "main.js",
-      "preload.js",
+      "electron/main.js",
+      "electron/preload.js",
       "package.json"
     ],
     "extraResources": [

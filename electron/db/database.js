@@ -1,9 +1,9 @@
 const sqlite3 = require('sqlite3').verbose();
-const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
+const { count } = require('console');
 
 let db;
 
@@ -38,8 +38,9 @@ function initializeTables() {
         const id = uuidv4();
         const hashedPassword = await bcrypt.hashSync('root123', 10);
         const created_at = new Date().toISOString();
-        db.run(`INSERT INTO users (id, username, password, role, created_at) VALUES (?, ?, ?, ?, ?)`,
-          [id, 'root', hashedPassword, 'root', created_at]
+        db.run(
+          `INSERT INTO users (id, username, password, role, created_at) VALUES (?, ?, ?, ?, ?)`,
+          [id, 'root', hashedPassword, 'root', created_at],
         );
         console.log('Root admin created');
       }
@@ -121,7 +122,7 @@ function runQuery(query, params = []) {
 
 function runExec(query, params = []) {
   return new Promise((resolve, reject) => {
-    db.run(query, params, function(err) {
+    db.run(query, params, function (err) {
       if (err) reject(err);
       else resolve({ lastID: this.lastID, changes: this.changes });
     });
@@ -131,7 +132,7 @@ function runExec(query, params = []) {
 // --- IMPORT EXCEL GÉNÉRIQUE ---
 async function importExcel(table, filePath) {
   if (!fs.existsSync(filePath)) throw new Error('File does not exist');
-
+  /*
   const workbook = XLSX.readFile(filePath);
   const sheetName = workbook.SheetNames[0];
   const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
@@ -149,11 +150,13 @@ async function importExcel(table, filePath) {
   }
 
   return { success: true, count: data.length };
+*/
+  return { success: false, count: 0 };
 }
 
 // --- EXPORT EXCEL GÉNÉRIQUE ---
 async function exportExcel(table, filePath) {
-  const rows = await runQuery(`SELECT * FROM ${table}`);
+  /*  const rows = await runQuery(`SELECT * FROM ${table}`);
   if (!rows.length) return { success: true, count: 0 };
 
   const worksheet = XLSX.utils.json_to_sheet(rows);
@@ -162,6 +165,8 @@ async function exportExcel(table, filePath) {
 
   XLSX.writeFile(workbook, filePath);
   return { success: true, count: rows.length };
+*/
+  return { success: false, count: 0 };
 }
 
 module.exports = { initDatabase, runQuery, runExec, importExcel, exportExcel };
