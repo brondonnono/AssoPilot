@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcryptjs');
-const { count } = require('console');
 
 let db;
 

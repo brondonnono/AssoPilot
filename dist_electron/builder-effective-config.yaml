@@ -6,8 +6,8 @@ productName: AssoPilot
 files:
   - filter:
       - dist/asso-pilot/**/*
-      - electron/main.js
-      - electron/preload.js
+      - electron/**/*
+      - electron/db/**/*
       - package.json
 extraResources:
   - from: public/assets/
@@ -16,7 +16,7 @@ extraResources:
       - '**/*'
 win:
   target: nsis
-  icon: public/assets/icon.png
+  icon: public/favicon.ico
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true

@@ -86,6 +86,7 @@
     "files": [
       "dist/asso-pilot/**/*",
       "electron/**/*",
+      "electron/db/**/*",
       "package.json"
     ],
     "extraResources": [
@@ -99,7 +100,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "public/assets/icon.png"
+      "icon": "public/favicon.ico"
     },
     "nsis": {
       "oneClick": false,

@@ -4,7 +4,6 @@ const path = require('path');
 
 let mainWindow;
 
-
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
@@ -17,7 +16,7 @@ function createWindow() {
     alwaysOnTop: true,
     transparent: true,
   });
-  splash.loadFile('electron/loader.html');
+  splash.loadFile(path.join(__dirname, 'loader.html'));
 
   mainWindow = new BrowserWindow({
     width: width,
@@ -25,7 +24,6 @@ function createWindow() {
     minWidth: 1000,
     minHeight: 700,
     backgroundColor: '#ffffff',
-    icon: path.join(__dirname, '../public/assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -40,7 +38,10 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:4200');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname,  '../dist/asso-pilot/browser/index.html'));
+    const dataDir = path.join(__dirname, 'dist');
+      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
+    mainWindow.loadFile(path.join(dataDir, '/asso-pilot/browser/index.html'));
+    mainWindow.webContents.openDevTools();
   }
 
   mainWindow.webContents.on('did-finish-load', () => {
