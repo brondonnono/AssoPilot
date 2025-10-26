@@ -1,0 +1,106 @@
+<div class="flex items-center w-full">
+  <h4 mat-dialog-title class="w-5/6">
+    {{
+      (data.mode === ActionType.CREATE
+        ? 'cotisations.create-cotisation-heading'
+        : data.mode === ActionType.EDIT
+        ? 'cotisations.edit-cotisation-heading'
+        : 'cotisations.cotisation-details-heading'
+      ) | translate
+    }}
+  </h4>
+  <button mat-dialog-close matIconButton>
+    <i class="ri ri-close-line text-2xl text-blue-500"></i>
+  </button>
+</div>
+
+<mat-dialog-content>
+  <form [formGroup]="eventForm" (submit)="save()">
+    <div class="flex flex-col gap-6 items-center w-full">
+      <div class="flex flex-row gap-2 w-full">
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'common.title' | translate }}</mat-label>
+          <input matInput type="text" formControlName="label" required />
+          @if (label?.invalid && (label?.dirty || label?.touched) && label?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'common.location' | translate }}</mat-label>
+          <input matInput type="text" formControlName="location" required />
+          @if (location?.invalid && (location?.dirty || location?.touched) &&
+          location?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="flex flex-row gap-2 w-full">
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'common.start_date' | translate }}</mat-label>
+          <input matInput [matDatepicker]="dp" formControlName="start_date" />
+          <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker #dp [disabled]="!canEdit"></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="!w-1/2">
+          <mat-label>{{ 'common.end_date' | translate }}</mat-label>
+          <input matInput [matDatepicker]="dp" formControlName="end_date" />
+          <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
+          <mat-datepicker #dp1 [disabled]="!canEdit"></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div class="w-full">
+        <mat-form-field class="!w-full">
+          <mat-label>{{ 'members.select-members' | translate }}</mat-label>
+          <mat-select formControlName="members" multiple [compareWith]="compareMembers">
+            @for (member of membersList; track $index) {
+            <mat-option [value]="member.id">{{ member.name }}</mat-option>
+            }
+          </mat-select>
+          @if (members?.invalid && (members?.dirty || members?.touched) &&
+          members?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+      <div class="w-full">
+        <mat-form-field class="!w-full">
+          <mat-label>{{ 'members.description' | translate }}</mat-label>
+          <textarea matInput placeholder="description"></textarea>
+          @if (description?.invalid && (description?.dirty || description?.touched) &&
+          description?.hasError('required')) {
+          <mat-error>{{ 'common.field-required' | translate }}</mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+@if (canEdit) {
+<mat-dialog-actions>
+  <div class="flex justify-between w-full">
+    <button
+      matButton
+      mat-dialog-close
+      [disabled]="isLoading"
+      class=" {{ isLoading ? '!text-gray-300' : '!text-red-600' }}"
+    >
+      {{ 'common.cancel' | translate }}
+    </button>
+    <button matButton [disabled]="eventForm.invalid || isLoading" (click)="save()" cdkFocusInitial>
+      @if (isLoading) {
+      <mat-spinner></mat-spinner>
+      } @else {
+      <div class="flex gap-2 items-center">
+        <i
+          class="ri-save-2-line text-lg  {{
+            eventForm.invalid || isLoading ? '!text-gray-300' : 'text-blue-600'
+          }}"
+        ></i>
+        <span> {{ 'common.save' | translate }}</span>
+      </div>
+      }
+    </button>
+  </div>
+</mat-dialog-actions>
+}

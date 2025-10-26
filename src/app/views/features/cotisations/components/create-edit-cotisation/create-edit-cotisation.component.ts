@@ -97,7 +97,7 @@ export class CreateEditCotisationComponent implements OnInit {
       amount: [0, [Validators.required, Validators.min(1000)]],
       frequency: [Period.WEEK, Validators.required],
       start_date: ['', [Validators.required]],
-      members: [[], [Validators.required, this.minSelectedMembersValidator(2)]],
+      members: ['', [Validators.required, this.minSelectedMembersValidator(2)]],
     });
     this.cotisationForm.get('start_date')?.disable();
     if (!this.canEdit) {
