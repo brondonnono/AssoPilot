@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import {
   AbstractControl,
@@ -23,7 +24,7 @@ import { Member } from '../../../../../core/models/Member';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NotificationsService } from '../../../../../services/notifications.service';
-import { UserService } from '../../../../../services/user.service';
+import { CotisationService } from '../../../../../services/cotisation.service';
 
 @Component({
   selector: 'app-create-edit-cotisation',
@@ -60,7 +61,7 @@ export class CreateEditCotisationComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   public dialogRef = inject(MatDialogRef<CreateEditCotisationComponent>);
-  userService = inject(UserService);
+  cotisationService = inject(CotisationService);
   notificationService = inject(NotificationsService);
 
   ngOnInit(): void {
@@ -124,9 +125,39 @@ export class CreateEditCotisationComponent implements OnInit {
     return !!m1 && !!m2 && m1.id === m2.id;
   }
 
-  save() {
-    this.dialogRef.close('_SAVED');
-    console.log(this.cotisationForm.value);
+  async save() {
+    this.isLoading = true;
+
+    try {
+      const userData = this.cotisationForm.value;
+
+      if (this.data.mode === ActionType.CREATE) {
+        await this.cotisationService.add(userData);
+        this.notificationService.showMessage('✅ Cotisation created successfully');
+      } else if (this.data.mode === ActionType.EDIT && this.data.cotisation) {
+        const updatedCotisation: Cotisation = { ...this.data.cotisation, ...userData };
+        await this.cotisationService.update(updatedCotisation);
+        this.notificationService.showMessage('✅ Cotisation updated successfully');
+      }
+
+      this.dialogRef.close('_SAVED');
+    } catch (error: any) {
+      console.error('Error saving cotisation:', error);
+
+      if (error.message.includes('Tontine name already taken')) {
+        this.notificationService.showMessage(
+          '⚠️ Tontine name already in use. Please choose another.',
+          true
+        );
+      } else {
+        this.notificationService.showMessage(
+          '❌ An error occurred while saving the cotisation.',
+          true
+        );
+      }
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   minSelectedMembersValidator(min: number) {

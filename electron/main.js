@@ -8,16 +8,28 @@ let mainWindow;
 // 🔧 Fonction pour créer la fenêtre principale
 function createWindow() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  splash = new BrowserWindow({
+    width: width,
+    height: height,
+    frame: false,
+    minWidth: 1000,
+    minHeight: 700,
+    alwaysOnTop: true,
+    transparent: true,
+  });
+  splash.loadFile('electron/loader.html');
+
   mainWindow = new BrowserWindow({
     width: width,
     height: height,
     minWidth: 1000,
     minHeight: 700,
     backgroundColor: '#ffffff',
-    icon: path.join(__dirname, 'public/assets/icon.ico'),
+    icon: path.join(__dirname, '..', 'public/assets/icon.ico'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      contextIsolation: true, // sécurité
+      contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
     },
@@ -25,18 +37,21 @@ function createWindow() {
 
   Menu.setApplicationMenu(null);
 
-  mainWindow.loadFile('electron/loader.html');
+  // En dev → charge Angular via localhost
+  if (!app.isPackaged) {
+    mainWindow.loadURL('http://localhost:4200');
+    mainWindow.webContents.openDevTools();
+  } else {
+    // En prod → charge les fichiers buildés Angular
+    mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
+  }
 
-  setTimeout(() => {
-    // En dev → charge Angular via localhost
-    if (!app.isPackaged) {
-      mainWindow.loadURL('http://localhost:4200');
-      mainWindow.webContents.openDevTools();
-    } else {
-      // En prod → charge les fichiers buildés Angular
-      mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
+  mainWindow.webContents.on('did-finish-load', () => {
+    if (splash) {
+      splash.close();
     }
-  }, 5000);
+    mainWindow.show();
+  });
 
   // Initialise la base SQLite
   initDatabase();
