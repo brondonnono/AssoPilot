@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import {
   FormBuilder,
@@ -16,6 +17,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../../../../../core/models/User';
 import { ActionType } from '../../../../../core/enums/ActionType.enum';
+import { UserRole } from '../../../../../core/enums/UserRole.enum';
+import { UserService } from '../../../../../services/user.service';
+import { NotificationsService } from '../../../../../services/notifications.service';
 
 @Component({
   selector: 'app-create-edit-user',
@@ -36,6 +40,13 @@ import { ActionType } from '../../../../../core/enums/ActionType.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateEditUserComponent implements OnInit {
+  newUser: Omit<User, 'id' | 'created_at'> = {
+    username: '',
+    password: '',
+    role: UserRole.ADMIN,
+  };
+  userService = inject(UserService);
+  notificationService = inject(NotificationsService);
   ActionType = ActionType;
   userForm!: FormGroup;
   userRoles = ['admin', 'super_admin'];
@@ -47,7 +58,8 @@ export class CreateEditUserComponent implements OnInit {
     user?: User;
   } = inject(MAT_DIALOG_DATA);
 
-  constructor(public dialogRef: MatDialogRef<CreateEditUserComponent>, private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+  public dialogRef = inject(MatDialogRef<CreateEditUserComponent>);
 
   ngOnInit(): void {
     this.canEdit = this.data.mode !== ActionType.SHOW;
@@ -85,7 +97,36 @@ export class CreateEditUserComponent implements OnInit {
     event.stopPropagation();
   }
 
-  save() {
-    this.dialogRef.close('_SAVED');
+  async save() {
+    this.isLoading = true;
+
+    try {
+      const userData = this.userForm.value;
+
+      if (this.data.mode === ActionType.CREATE) {
+        await this.userService.add(userData);
+        this.notificationService.showMessage('✅ User created successfully');
+      } else if (this.data.mode === ActionType.EDIT && this.data.user) {
+        const updatedUser: User = { ...this.data.user, ...userData };
+        await this.userService.update(updatedUser);
+        this.notificationService.showMessage('✅ User updated successfully');
+      }
+
+      this.dialogRef.close('_SAVED');
+    } catch (error: any) {
+      console.error('Error saving user:', error);
+
+      // Message d’erreur utilisateur clair
+      if (error.message.includes('Username already taken')) {
+        this.notificationService.showMessage(
+          '⚠️ Username already in use. Please choose another.',
+          true
+        );
+      } else {
+        this.notificationService.showMessage('❌ An error occurred while saving the user.', true);
+      }
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

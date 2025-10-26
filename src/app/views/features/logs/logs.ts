@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
-import { ImportExportDataService } from '../../../services/import-export-data.service';
-import { MockDataService } from '../../../services/MockData.service';
+import { Component, inject, OnInit } from '@angular/core';
 import { Log } from '../../../core/models/Log';
 import { DatePipe } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -9,6 +7,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ColumnTemplateDirective } from '../../../core/directives/ColumnTemplate.directive';
 import { TableComponent } from '../../../shared/components/table/table.component';
 import { MatButtonModule } from '@angular/material/button';
+import { LogService } from '../../../services/log.service';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-logs',
@@ -24,36 +24,32 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './logs.html',
   styleUrl: './logs.scss',
 })
-export class Logs {
+export class Logs implements OnInit {
+  private logService = inject(LogService);
+  notificationService = inject(NotificationsService);
+
   logs: Log[] = [];
   isFetchingData = false;
   displayedColumns = ['user', 'action', 'created_at'];
-  constructor(
-    private mockDataService: MockDataService,
-    private exportDataService: ImportExportDataService
-  ) {}
 
   ngOnInit(): void {
     this.fetchLogs();
   }
 
-  fetchLogs() {
+  async fetchLogs() {
     this.isFetchingData = true;
-    this.mockDataService.getLogs().subscribe({
-      next: (res) => {
-        this.logs = res;
-      },
-      error: (error) => {
-        this.isFetchingData = false;
-        console.log('Get logs error: ', error);
-      },
-      complete: () => {
-        this.isFetchingData = false;
-      },
-    });
+    try {
+      this.logs = await this.logService.getAll();
+      console.log(this.logs);
+    } catch (error) {
+      console.error('Get logs error: ', error);
+      this.notificationService.showMessage('Error fetching logs', true);
+    } finally {
+      this.isFetchingData = false;
+    }
   }
 
   download() {
-    this.exportDataService.exportToExcel(this.logs, 'logs.xlsx');
+    console.log('export');
   }
 }

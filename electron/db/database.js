@@ -1,4 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
+const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
@@ -7,7 +8,7 @@ const bcrypt = require('bcrypt');
 let db;
 
 function initDatabase() {
-  const dataDir = path.join(__dirname, '..', 'data');
+  const dataDir = path.join(__dirname, 'data');
   if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
 
   const dbPath = path.join(dataDir, 'app.db');
@@ -35,10 +36,10 @@ function initializeTables() {
       if (err) console.error(err);
       if (!row) {
         const id = uuidv4();
-        const hashedPassword = await bcrypt.hash('root123', 10);
+        const hashedPassword = await bcrypt.hashSync('root123', 10);
         const created_at = new Date().toISOString();
         db.run(`INSERT INTO users (id, username, password, role, created_at) VALUES (?, ?, ?, ?, ?)`,
-          [id, 'root', hashedPassword, 'admin', created_at]
+          [id, 'root', hashedPassword, 'root', created_at]
         );
         console.log('Root admin created');
       }
@@ -118,4 +119,49 @@ function runQuery(query, params = []) {
   });
 }
 
-module.exports = { initDatabase, runQuery };
+function runExec(query, params = []) {
+  return new Promise((resolve, reject) => {
+    db.run(query, params, function(err) {
+      if (err) reject(err);
+      else resolve({ lastID: this.lastID, changes: this.changes });
+    });
+  });
+}
+
+// --- IMPORT EXCEL GÉNÉRIQUE ---
+async function importExcel(table, filePath) {
+  if (!fs.existsSync(filePath)) throw new Error('File does not exist');
+
+  const workbook = XLSX.readFile(filePath);
+  const sheetName = workbook.SheetNames[0];
+  const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+  if (!data.length) return { success: false, count: 0 };
+
+  // Préparer la requête SQL
+  const columns = Object.keys(data[0]);
+  const placeholders = columns.map(() => '?').join(',');
+  const insertQuery = `INSERT INTO ${table} (${columns.join(',')}) VALUES (${placeholders})`;
+
+  for (const row of data) {
+    const values = columns.map(col => row[col] ?? (col === 'id' ? uuidv4() : null));
+    await runQuery(insertQuery, values);
+  }
+
+  return { success: true, count: data.length };
+}
+
+// --- EXPORT EXCEL GÉNÉRIQUE ---
+async function exportExcel(table, filePath) {
+  const rows = await runQuery(`SELECT * FROM ${table}`);
+  if (!rows.length) return { success: true, count: 0 };
+
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, table);
+
+  XLSX.writeFile(workbook, filePath);
+  return { success: true, count: rows.length };
+}
+
+module.exports = { initDatabase, runQuery, runExec, importExcel, exportExcel };

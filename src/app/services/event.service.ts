@@ -6,11 +6,13 @@ import { ActionType, TargetType } from '../core/enums/ActionType.enum';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../core/state/auth/auth.selector';
 import { User } from '../core/models/User';
+import { DbUtilityService } from './DbUtilityService';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
   private electron = inject(ElectronService);
   private logService = inject(LogService);
+  private readonly dbUtilityService = inject(DbUtilityService);
   private store = inject(Store);
   private currentUser: User | null | undefined = null;
 
@@ -22,10 +24,24 @@ export class EventService {
     return await this.electron.runQuery('SELECT * FROM events');
   }
 
+  async getUpcomingEvents(limit: number): Promise<Event[]> {
+    const query = `SELECT * 
+    FROM events 
+    WHERE start_date >= ? 
+    ORDER BY start_date ASC ${limit ? 'LIMIT ?' : ''}`;
+
+    return await this.electron.runQuery(
+      query,
+      limit
+        ? [this.dbUtilityService.getCurrentDate(), limit]
+        : [this.dbUtilityService.getCurrentDate()]
+    );
+  }
+
   async add(event: Omit<Event, 'id' | 'created_at' | 'updated_at'>) {
     if (this.currentUser) {
-      const id = crypto.randomUUID();
-      const created_at = new Date().toISOString();
+      const id = this.dbUtilityService.generateUUID();
+      const created_at = this.dbUtilityService.getCurrentDate();
       await this.electron.runQuery(
         `INSERT INTO events (id,label,description,start_date,end_date,location,created_at) VALUES (?,?,?,?,?,?,?)`,
         [
@@ -50,7 +66,7 @@ export class EventService {
 
   async update(event: Event) {
     if (this.currentUser) {
-      const updated_at = new Date().toISOString();
+      const updated_at = this.dbUtilityService.getCurrentDate();
       await this.electron.runQuery(
         `UPDATE events SET label=?, description=?, start_date=?, end_date=?, location=?, updated_at=? WHERE id=?`,
         [

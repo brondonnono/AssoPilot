@@ -1,5 +1,5 @@
 const { app, BrowserWindow, Menu, screen, ipcMain, dialog } = require('electron');
-const { initDatabase, runQuery } = require('./database');
+const { initDatabase, runQuery, importExcel, exportExcel } = require('./db/database');
 const path = require('path');
 
 // Garde une référence globale de la fenêtre (évite la fermeture automatique)
@@ -7,7 +7,7 @@ let mainWindow;
 
 // 🔧 Fonction pour créer la fenêtre principale
 function createWindow() {
-  const { width, height } = screen.getPrimaryDisplay().workAreaSize; 
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
   mainWindow = new BrowserWindow({
     width: width,
     height: height,
@@ -18,20 +18,20 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true, // sécurité
-      nodeIntegration: true,
+      nodeIntegration: false,
       sandbox: false,
     },
   });
 
   Menu.setApplicationMenu(null);
 
-  mainWindow.loadFile('loader.html');
+  mainWindow.loadFile('electron/loader.html');
 
   setTimeout(() => {
     // En dev → charge Angular via localhost
     if (!app.isPackaged) {
       mainWindow.loadURL('http://localhost:4200');
-    //  mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools();
     } else {
       // En prod → charge les fichiers buildés Angular
       mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
@@ -55,6 +55,17 @@ ipcMain.handle('login', async (_, username, password) => {
   if (!match) return { success: false, message: 'Mot de passe incorrect' };
   return { success: true, user: { id: user.id, username: user.username, role: user.role } };
 });
+
+ipcMain.handle('run-query', async (_, query, params) => {
+  return await runQuery(query, params);
+});
+
+/*ipcMain.handle('run-exec', async (_, query, params) => {
+  return await runExec(query, params);
+});*/
+
+ipcMain.handle('import-excel', async (event, table, filePath) => importExcel(table, filePath));
+ipcMain.handle('export-excel', async (event, table, filePath) => exportExcel(table, filePath));
 
 ipcMain.handle('get-app-version', () => app.getVersion());
 ipcMain.handle('open-dialog', (_, options) => dialog.showOpenDialog(options));

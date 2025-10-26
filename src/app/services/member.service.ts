@@ -6,11 +6,13 @@ import { User } from '../core/models/User';
 import { selectUser } from '../core/state/auth/auth.selector';
 import { LogService } from './log.service';
 import { ActionType, TargetType } from '../core/enums/ActionType.enum';
+import { DbUtilityService } from './DbUtilityService';
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {
   private electron = inject(ElectronService);
   private logService = inject(LogService);
+  private readonly dbUtilityService = inject(DbUtilityService);
   private store = inject(Store);
   private currentUser: User | null | undefined = null;
 
@@ -24,8 +26,8 @@ export class MemberService {
 
   async add(member: Omit<Member, 'id' | 'created_at' | 'updated_at'>) {
     if (this.currentUser) {
-      const id = crypto.randomUUID();
-      const created_at = new Date().toISOString();
+      const id = this.dbUtilityService.generateUUID();
+      const created_at = this.dbUtilityService.getCurrentDate();
       await this.electron.runQuery(
         `INSERT INTO members (id,name,phone,cni,status,joined_date,created_at,updated_at) VALUES (?,?,?,?,?,?,?)`,
         [
@@ -49,7 +51,7 @@ export class MemberService {
 
   async update(member: Member) {
     if (this.currentUser) {
-      const updated_at = new Date().toISOString();
+      const updated_at = this.dbUtilityService.getCurrentDate();
       await this.electron.runQuery(
         `UPDATE members SET name=?, phone=?, cni=?, status=?, joined_date=?, updated_at=? WHERE id=?`,
         [

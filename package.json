@@ -2,7 +2,7 @@
   "name": "asso-pilot",
   "version": "1.0.0",
   "private": true,
-  "main": "main.js",
+  "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -11,6 +11,7 @@
     "build": "ng build --base-href ./",
     "electron:start": "npm run build && electron .",
     "electron:build": "npm run build && electron-builder",
+    "electron:ng-build": "ng build && tsc -p electron/tsconfig.json",
     "test": "ng test",
     "lint": "ng lint"
   },
@@ -44,6 +45,7 @@
     "@tailwindcss/postcss": "^4.1.13",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "file-saver": "^2.0.5",
     "ngrx-store-localstorage": "^20.0.0",
     "postcss": "^8.5.6",
     "remixicon": "^4.6.0",
@@ -52,6 +54,7 @@
     "tailwindcss": "^4.1.13",
     "tslib": "^2.3.0",
     "uuid": "^13.0.0",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

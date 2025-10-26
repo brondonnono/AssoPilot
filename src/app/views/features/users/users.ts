@@ -1,7 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MockDataService } from '../../../services/MockData.service';
+import { MatDialog } from '@angular/material/dialog';
 import { User } from '../../../core/models/User';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +12,8 @@ import { ColumnTemplateDirective } from '../../../core/directives/ColumnTemplate
 import { UserRole } from '../../../core/enums/UserRole.enum';
 import { CreateEditUserComponent } from './components/create-edit-user/create-edit-user.component';
 import { ActionType } from '../../../core/enums/ActionType.enum';
-import { ImportExportDataService } from '../../../services/import-export-data.service';
+import { UserService } from '../../../services/user.service';
+import { NotificationsService } from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-users',
@@ -22,65 +22,65 @@ import { ImportExportDataService } from '../../../services/import-export-data.se
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    MatDialogModule,
     TableComponent,
     DatePipe,
     ColumnTemplateDirective,
   ],
   templateUrl: './users.html',
-  styleUrl: './users.scss',
+  styleUrls: ['./users.scss'],
 })
-export class Users {
+export class Users implements OnInit {
   readonly dialog = inject(MatDialog);
+  notificationService = inject(NotificationsService);
+  private userService = inject(UserService);
   Role = UserRole;
   users: User[] = [];
   isFetchingData = false;
   displayedColumns = ['username', 'role', 'created_at', 'actions'];
-  constructor(
-    private mockDataService: MockDataService,
-    private exportDataService: ImportExportDataService
-  ) {}
 
   ngOnInit(): void {
     this.fetchUsers();
   }
 
-  fetchUsers() {
+  async fetchUsers() {
     this.isFetchingData = true;
-    this.mockDataService.getUsers().subscribe({
-      next: (res) => {
-        this.users = res;
-      },
-      error: (error) => {
-        this.isFetchingData = false;
-        console.log('Get users error: ', error);
-      },
-      complete: () => {
-        this.isFetchingData = false;
-      },
-    });
+    try {
+      this.users = await this.userService.getAll();
+      console.log(this.users); // Utilisez await ici
+    } catch (error) {
+      console.error('Get users error: ', error);
+      this.notificationService.showMessage('Error fetching users', true);
+    } finally {
+      this.isFetchingData = false;
+    }
   }
 
-  add() {
-    this.openCreateEditUserModal(ActionType.CREATE).subscribe((res) => {
-      if (res === '_SAVED') this.fetchUsers();
-    });
+  async add() {
+    const result = await this.openCreateEditUserModal(ActionType.CREATE).toPromise();
+    if (result === '_SAVED') this.fetchUsers();
   }
 
   download() {
-    this.exportDataService.exportToExcel(this.users, 'users.xlsx');
+    console.log('export');
   }
 
-  remove(user: User) {
-    this.openConfirmModal().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
+  async remove(user: User) {
+    const result = await this.openConfirmModal().toPromise();
+    if (result) {
+      try {
+        await this.userService.delete(user.id); // Assurez-vous que delete() est une méthode du UserService
+        this.fetchUsers();
+        this.notificationService.showMessage('User deleted successfully');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        this.notificationService.showMessage('Error deleting user', true);
+      }
+    }
   }
 
-  edit(user: User) {
-    this.openCreateEditUserModal(ActionType.EDIT, user).subscribe((res) => {
-      if (res === '_SAVED') this.fetchUsers();
-    });
+  async edit(user: User) {
+    const result = await this.openCreateEditUserModal(ActionType.EDIT, user).toPromise();
+    if (result === '_SAVED') this.fetchUsers();
   }
 
   view(user: User) {

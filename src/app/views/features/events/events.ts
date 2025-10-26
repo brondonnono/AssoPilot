@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslatePipe } from '@ngx-translate/core';
-import { MockDataService } from '../../../services/MockData.service';
 import { Event as IEvent } from '../../../core/models/Event';
 import { EventTable } from '../../../shared/components/event-table/event-table';
 import { ActionType } from '../../../core/enums/ActionType.enum';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ConfirmComponent } from '../../../shared/components/confirm/confirm.component';
-import { ImportExportDataService } from '../../../services/import-export-data.service';
 import { CreateEditEventComponent } from './components/create-edit-event/create-edit-event.component';
+import { NotificationsService } from '../../../services/notifications.service';
+import { EventService } from '../../../services/event.service';
 
 @Component({
   selector: 'app-events',
@@ -27,48 +28,59 @@ import { CreateEditEventComponent } from './components/create-edit-event/create-
 })
 export class Events implements OnInit {
   readonly dialog = inject(MatDialog);
+  notificationService = inject(NotificationsService);
+  private eventService = inject(EventService);
+
   events: IEvent[] = [];
   isFetchingData = false;
-
-  constructor(
-    private mockDataService: MockDataService,
-    private exportDataService: ImportExportDataService
-  ) {}
 
   ngOnInit(): void {
     this.fetchEvents();
   }
 
-  fetchEvents() {
+  async fetchEvents() {
     this.isFetchingData = true;
-    this.mockDataService.getEvents().subscribe({
-      next: (res) => {
-        this.events = res;
-      },
-      error: (error) => {
-        this.isFetchingData = false;
-        console.log('Get events error: ', error);
-      },
-      complete: () => {
-        this.isFetchingData = false;
-      },
-    });
+    try {
+      this.events = await this.eventService.getAll();
+      console.log(this.events);
+    } catch (error) {
+      console.error('Get event error: ', error);
+      this.notificationService.showMessage('Error fetching events', true);
+    } finally {
+      this.isFetchingData = false;
+    }
   }
 
-  add() {
-    this.openCreateEditEventModal(ActionType.CREATE).subscribe((res) => {
-      if (res === '_SAVED') this.fetchEvents();
-    });
+  async add() {
+    const result = await this.openCreateEditEventModal(ActionType.CREATE).toPromise();
+    if (result === '_SAVED') this.fetchEvents();
   }
 
   download() {
-    this.exportDataService.exportToExcel(this.events, 'events.xlsx');
+    console.log('export');
   }
 
-  edit(event: IEvent) {
-    this.openCreateEditEventModal(ActionType.EDIT, event).subscribe((res) => {
-      if (res === '_SAVED') this.fetchEvents();
-    });
+  async remove(event: IEvent) {
+    const result = await this.openConfirmModal().toPromise();
+    if (result) {
+      try {
+        await this.eventService.delete(event.id);
+        this.fetchEvents();
+        this.notificationService.showMessage('Event deleted successfully');
+      } catch (error) {
+        console.error('Error deleting event:', error);
+        this.notificationService.showMessage('Error deleting event', true);
+      }
+    }
+  }
+
+  async edit(event: IEvent) {
+    const result = await this.openCreateEditEventModal(ActionType.EDIT, event).toPromise();
+    if (result === '_SAVED') this.fetchEvents();
+  }
+
+  view(event: IEvent) {
+    this.openCreateEditEventModal(ActionType.SHOW, event);
   }
 
   openCreateEditEventModal(action: ActionType, event?: IEvent) {
@@ -83,18 +95,14 @@ export class Events implements OnInit {
     return dialogRef.afterClosed();
   }
 
-  handleEventAction(event: any) {
-    const { action: action, data } = event;
-    if (action === ActionType.DELETE) {
-      this.openConfirmModal();
-      console.log(event);
-    }
+  handleEventAction(event: { action: ActionType; data: IEvent }) {
+    if (event.action === ActionType.DELETE) {
+      this.remove(event.data);
+    } else if (event.action === ActionType.SHOW) this.view(event.data);
   }
 
   openConfirmModal() {
     const dialogRef = this.dialog.open(ConfirmComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result: ${result}`);
-    });
+    return dialogRef.afterClosed();
   }
 }

@@ -71,7 +71,7 @@
     </button>
     <button matButton [disabled]="userForm.invalid || isLoading" (click)="save()" cdkFocusInitial>
       @if (isLoading) {
-      <mat-spinner></mat-spinner>
+      <mat-spinner diameter="20"></mat-spinner>
       } @else {
       <div class="flex gap-2 items-center">
         <i
