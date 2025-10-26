@@ -129,13 +129,13 @@ export class CreateEditCotisationComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      const userData = this.cotisationForm.value;
+      const cotisationData = this.cotisationForm.value;
 
       if (this.data.mode === ActionType.CREATE) {
-        await this.cotisationService.add(userData);
+        await this.cotisationService.add(cotisationData);
         this.notificationService.showMessage('✅ Cotisation created successfully');
       } else if (this.data.mode === ActionType.EDIT && this.data.cotisation) {
-        const updatedCotisation: Cotisation = { ...this.data.cotisation, ...userData };
+        const updatedCotisation: Cotisation = { ...this.data.cotisation, ...cotisationData };
         await this.cotisationService.update(updatedCotisation);
         this.notificationService.showMessage('✅ Cotisation updated successfully');
       }

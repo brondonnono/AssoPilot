@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -17,6 +18,8 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Member } from '../../../../../core/models/Member';
 import { MemberStatus } from '../../../../../core/enums/MemberStatus.enum';
 import { ActionType } from '../../../../../core/enums/ActionType.enum';
+import { MemberService } from '../../../../../services/member.service';
+import { NotificationsService } from '../../../../../services/notifications.service';
 
 @Component({
   selector: 'app-create-edit-member',
@@ -46,8 +49,10 @@ export class CreateEditMemberComponent implements OnInit {
     mode: ActionType;
     member?: Member;
   } = inject(MAT_DIALOG_DATA);
-
-  constructor(public dialogRef: MatDialogRef<CreateEditMemberComponent>, private fb: FormBuilder) {}
+  private fb = inject(FormBuilder);
+  public dialogRef = inject(MatDialogRef<CreateEditMemberComponent>);
+  memberService = inject(MemberService);
+  notificationService = inject(NotificationsService);
 
   ngOnInit(): void {
     this.canEdit = this.data.mode !== ActionType.SHOW;
@@ -98,7 +103,35 @@ export class CreateEditMemberComponent implements OnInit {
     return this.memberForm.get('status');
   }
 
-  save() {
-    this.dialogRef.close('_SAVED');
+  async save() {
+    this.isLoading = true;
+
+    try {
+      const memberData = this.memberForm.value;
+
+      if (this.data.mode === ActionType.CREATE) {
+        await this.memberService.add(memberData);
+        this.notificationService.showMessage('✅ Member created successfully');
+      } else if (this.data.mode === ActionType.EDIT && this.data.member) {
+        const updatedMember: Member = { ...this.data.member, ...memberData };
+        await this.memberService.update(updatedMember);
+        this.notificationService.showMessage('✅ Member updated successfully');
+      }
+
+      this.dialogRef.close('_SAVED');
+    } catch (error: any) {
+      console.error('Error saving member:', error);
+
+      if (error.message.includes('Member name already taken')) {
+        this.notificationService.showMessage(
+          '⚠️ Member name already in use. Please choose another.',
+          true
+        );
+      } else {
+        this.notificationService.showMessage('❌ An error occurred while saving the member.', true);
+      }
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
