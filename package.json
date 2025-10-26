@@ -85,13 +85,12 @@
     },
     "files": [
       "dist/asso-pilot/**/*",
-      "electron/main.js",
-      "electron/preload.js",
+      "electron/**/*",
       "package.json"
     ],
     "extraResources": [
       {
-        "from": "src/assets/",
+        "from": "public/assets/",
         "to": "assets/",
         "filter": [
           "**/*"
@@ -100,7 +99,7 @@
     ],
     "win": {
       "target": "nsis",
-      "icon": "src/assets/icon.ico"
+      "icon": "public/assets/icon.png"
     },
     "nsis": {
       "oneClick": false,
