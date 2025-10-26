@@ -34,11 +34,13 @@ function createWindow() {
 
   Menu.setApplicationMenu(null);
 
+  const productionPath = path.join(__dirname, 'dist', 'asso-pilot', 'browser', 'index.html');
+
   if (!app.isPackaged) {
     mainWindow.loadURL('http://localhost:4200');
     mainWindow.webContents.openDevTools();
   } else {
-    mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
+    mainWindow.loadFile(productionPath);
     mainWindow.webContents.openDevTools();
   }
 
@@ -47,6 +49,10 @@ function createWindow() {
       splash.close();
     }
     mainWindow.show();
+  });
+
+  mainWindow.webContents.on('did-fail-load', () => {
+    mainWindow.loadFile(productionPath);
   });
 
   initDatabase();

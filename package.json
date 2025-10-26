@@ -1,8 +1,11 @@
 {
-  "name": "asso-pilot",
+  "name": "assopilot",
   "version": "1.0.0",
   "description": "Application moderne pour gérer facilement votre association, ses membres, ses cotisations et ses activités.",
-  "author": "Brondon Nono",
+  "author": {
+    "name": "Brondon Nono",
+    "email": "brondonnono3@gmail.com"
+  },
   "private": true,
   "main": "electron/main.js",
   "scripts": {
@@ -10,11 +13,51 @@
     "start": "ng serve",
     "serve": "concurrently \"npm run start\" \"npm run electron:watch\"",
     "electron:watch": "wait-on http://localhost:4200 && electron .",
-    "build": "ng build --configuration production",
+    "build": "ng build --base-href ./",
     "electron:start": "npm run build && electron .",
     "electron:build": "npm run build && electron-builder",
+    "electron:exe": "electron-builder",
     "test": "ng test",
     "lint": "ng lint"
+  },
+  "build": {
+    "appId": "com.assopilot.app",
+    "productName": "AssoPilot",
+    "directories": {
+      "output": "releases-builds"
+    },
+    "asar": true,
+    "files": [
+      "dist/asso-pilot/**/*",
+      "electron/**/*",
+      "electron/main.js",
+      "electron/preload.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "public/assets/",
+        "to": "assets/",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "public/i18n/",
+        "to": "i18n/",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/favicon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
   },
   "prettier": {
     "printWidth": 100,
@@ -76,35 +119,5 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "8.46.0",
     "wait-on": "^7.2.0"
-  },
-  "build": {
-    "appId": "com.assopilot.app",
-    "productName": "AssoPilot",
-    "directories": {
-      "output": "dist_electron"
-    },
-    "files": [
-      "dist/asso-pilot/**/*",
-      "electron/**/*",
-      "electron/db/**/*",
-      "package.json"
-    ],
-    "extraResources": [
-      {
-        "from": "public/assets/",
-        "to": "assets/",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "win": {
-      "target": "nsis",
-      "icon": "public/favicon.ico"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
-    }
   }
 }

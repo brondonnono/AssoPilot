@@ -14,8 +14,6 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { AuthEffects } from './core/state/auth/auth.effects';
-import { AuthReducer } from './core/state/auth/auth.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
