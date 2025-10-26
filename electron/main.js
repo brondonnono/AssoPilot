@@ -38,9 +38,7 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:4200');
     mainWindow.webContents.openDevTools();
   } else {
-    const dataDir = path.join(__dirname, 'dist');
-      if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir);
-    mainWindow.loadFile(path.join(dataDir, '/asso-pilot/browser/index.html'));
+    mainWindow.loadFile(path.join(__dirname, 'dist/asso-pilot/browser/index.html'));
     mainWindow.webContents.openDevTools();
   }
 
