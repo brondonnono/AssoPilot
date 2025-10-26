@@ -6,7 +6,7 @@ import { User } from '../core/models/User';
 import { selectUser } from '../core/state/auth/auth.selector';
 import { LogService } from './log.service';
 import { ActionType, TargetType } from '../core/enums/ActionType.enum';
-import { DbUtilityService } from './DbUtilityService';
+import { DbUtilityService } from './dbUtilityService';
 
 @Injectable({ providedIn: 'root' })
 export class MemberService {

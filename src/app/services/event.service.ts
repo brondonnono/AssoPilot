@@ -6,7 +6,7 @@ import { ActionType, TargetType } from '../core/enums/ActionType.enum';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../core/state/auth/auth.selector';
 import { User } from '../core/models/User';
-import { DbUtilityService } from './DbUtilityService';
+import { DbUtilityService } from './dbUtilityService';
 
 @Injectable({ providedIn: 'root' })
 export class EventService {
@@ -21,7 +21,7 @@ export class EventService {
   }
 
   async getAll(): Promise<Event[]> {
-    return await this.electron.runQuery('SELECT * FROM events');
+    return await this.electron.runQuery('SELECT * FROM events ORDER BY start_date ASC');
   }
 
   async getUpcomingEvents(limit: number): Promise<Event[]> {

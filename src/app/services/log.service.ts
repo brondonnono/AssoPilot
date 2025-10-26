@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ElectronService } from './electron.service';
 import { Log } from '../core/models/Log';
-import { DbUtilityService } from './DbUtilityService';
+import { DbUtilityService } from './dbUtilityService';
 
 @Injectable({
   providedIn: 'root',

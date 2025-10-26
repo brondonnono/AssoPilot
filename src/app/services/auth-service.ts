@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { User } from '../core/models/User';
-import { MockDataService } from './MockData.service';
 import { ElectronService } from './electron.service';
 
 export interface AuthResponse {
@@ -11,7 +10,6 @@ export interface AuthResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private mockDataService = inject(MockDataService);
   private electronService = inject(ElectronService);
 
   private currentUser: User | null = null;

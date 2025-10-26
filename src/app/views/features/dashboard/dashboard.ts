@@ -9,6 +9,7 @@ import { RouterLink } from '@angular/router';
 import { Metric } from '../../../core/models/Metric';
 import { EventService } from '../../../services/event.service';
 import { NotificationsService } from '../../../services/notifications.service';
+import { DashboardService } from '../../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +20,7 @@ import { NotificationsService } from '../../../services/notifications.service';
 export class Dashboard implements OnInit {
   private readonly eventService = inject(EventService);
   private notificationService = inject(NotificationsService);
+  private dashboardService = inject(DashboardService);
 
   upcomingEvents: IEvent[] = [];
   isFetchingData = true;
@@ -33,8 +35,7 @@ export class Dashboard implements OnInit {
   async fetchUpcomingEvents() {
     this.isFetchingData = true;
     try {
-      this.upcomingEvents = await this.eventService.getAll();
-      console.log(this.upcomingEvents);
+      this.upcomingEvents = await this.eventService.getUpcomingEvents(5);
     } catch (error) {
       console.error('Get upcoming events error: ', error);
       this.notificationService.showMessage('Error fetching upcoming events', true);
@@ -43,9 +44,9 @@ export class Dashboard implements OnInit {
     }
   }
 
-  getStatistics() {
+  async getStatistics() {
     this.isFetchingData = true;
-    this.metrics = this.dashboardService.getStatistics();
+    this.metrics = await this.dashboardService.getDashboardData();
     this.isFetchingData = false;
   }
 }

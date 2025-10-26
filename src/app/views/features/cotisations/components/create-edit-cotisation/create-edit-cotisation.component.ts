@@ -20,9 +20,10 @@ import { Cotisation } from '../../../../../core/models/Cotisation';
 import { Period } from '../../../../../core/enums/Period.enum';
 import { ActionType } from '../../../../../core/enums/ActionType.enum';
 import { Member } from '../../../../../core/models/Member';
-import { MockDataService } from '../../../../../services/MockData.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { NotificationsService } from '../../../../../services/notifications.service';
+import { UserService } from '../../../../../services/user.service';
 
 @Component({
   selector: 'app-create-edit-cotisation',
@@ -57,18 +58,16 @@ export class CreateEditCotisationComponent implements OnInit {
     cotisation?: Cotisation;
   } = inject(MAT_DIALOG_DATA);
 
-  constructor(
-    public dialogRef: MatDialogRef<CreateEditCotisationComponent>,
-    private fb: FormBuilder,
-    private mockDataService: MockDataService
-  ) {}
+  private fb = inject(FormBuilder);
+  public dialogRef = inject(MatDialogRef<CreateEditCotisationComponent>);
+  userService = inject(UserService);
+  notificationService = inject(NotificationsService);
 
   ngOnInit(): void {
     this.canEdit = this.data.mode !== ActionType.SHOW;
     this.initForm();
     if (this.data.mode !== ActionType.CREATE && this.data.cotisation)
       this.patchForm(this.data.cotisation);
-    this.fetchMembers();
   }
 
   get title() {
@@ -112,7 +111,7 @@ export class CreateEditCotisationComponent implements OnInit {
       this.cotisationForm.disable();
       this.cotisationForm.get('members')?.enable();
     }
-    this.cotisationForm.patchValue({
+    this.cotisationForm.setValue({
       title: cotisationData.title,
       amount: cotisationData.amount,
       frequency: cotisationData.frequency,
@@ -123,22 +122,6 @@ export class CreateEditCotisationComponent implements OnInit {
 
   compareMembers(m1: Member, m2: Member): boolean {
     return !!m1 && !!m2 && m1.id === m2.id;
-  }
-
-  fetchMembers() {
-    this.isFetchingData = true;
-    this.mockDataService.getMembers().subscribe({
-      next: (res) => {
-        this.membersList = res;
-      },
-      error: (error) => {
-        this.isFetchingData = false;
-        console.log('Get members error: ', error);
-      },
-      complete: () => {
-        this.isFetchingData = false;
-      },
-    });
   }
 
   save() {
